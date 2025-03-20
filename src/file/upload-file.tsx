@@ -1,9 +1,7 @@
-'use client'
-
-import { Input } from '@/components/ui/input'
+import { Input } from '@/components/ui/input.tsx'
 import React, { useState } from 'react'
 import * as XLSX from 'xlsx'
-import { Button } from '@/components/ui/button'
+import { Button } from '@/components/ui/button.tsx'
 import {
     Select,
     SelectContent,
@@ -12,7 +10,7 @@ import {
     SelectLabel,
     SelectTrigger,
     SelectValue
-} from '@/components/ui/select'
+} from '@/components/ui/select.tsx'
 import {filetypes} from "@/lib/mock.ts";
 
 const UploadFile = () => {
