@@ -12,7 +12,6 @@ import {
 } from '@/components/ui/select'
 import { filetypes } from '@/lib/mock.ts'
 import { PaperClipIcon } from '@heroicons/react/16/solid'
-import GradientBackgroundContainer from '@/components/GradientBackgroundContainer.tsx'
 
 let fileName: string = ''
 let fileNames: string[] = []
@@ -611,8 +610,8 @@ const Index = () => {
   }
 
   return (
-    <GradientBackgroundContainer className="min-h-screen min-w-full flex items-center justify-center">
-      <div className="flex flex-col items-center justify-center w-full max-w-2xl px-4 gap-8">
+    <div className="h-full  w-full flex flex-col items-center justify-center">
+      <div className="w-3/5 space-y-4">
         <div className="w-full grid gap-4">
           <label
             htmlFor="file-upload"
@@ -778,7 +777,7 @@ const Index = () => {
           </dd>
         </div>
       </div>
-    </GradientBackgroundContainer>
+    </div>
   )
 }
 
