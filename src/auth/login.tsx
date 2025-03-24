@@ -14,6 +14,11 @@ import { Input } from '@/components/ui/input'
 import useFetch from '@/lib/use-http.ts'
 import toast from 'react-hot-toast'
 import { useNavigate } from 'react-router-dom'
+import { useAuth, UserProps } from '@/context/AuthContext.tsx'
+
+interface ResponesProps extends UserProps {
+  access_token: string
+}
 
 const FormSchema = z.object({
   email: z.string().min(2, {
@@ -25,6 +30,7 @@ const FormSchema = z.object({
 })
 
 export const Login = () => {
+  const { setUser } = useAuth()
   const { loading, fetchData } = useFetch()
   const navigate = useNavigate()
 
@@ -37,58 +43,73 @@ export const Login = () => {
   })
 
   async function onSubmit(data: z.infer<typeof FormSchema>) {
-    localStorage.removeItem('access_token')
-    const res = await fetchData<
-      z.infer<typeof FormSchema>,
-      { access_token: string }
-    >('auth/login', 'POST', data)
+    const res = await fetchData<z.infer<typeof FormSchema>, ResponesProps>(
+      'auth/login',
+      'POST',
+      data
+    )
     if (res && res.access_token) {
       localStorage.setItem('access_token', res?.access_token) // 存储 access_token
+      setUser(res)
       toast.success('Login successfully!')
-      navigate('/upload')
+      navigate('/dashboard')
     }
   }
 
   return (
     <div className="flex w-full h-full sm:bg-custom-bg md:bg-custom-bg lg:bg-none">
-      <div className="w-1/2 sm:bg-white md:bg-white max-w-[800px] mx-auto p-6 flex flex-col items-center justify-center">
-        <img src="../assets/logoipsum-351.svg" alt="Logo" />
-        <Form {...form}>
-          <form
-            onSubmit={form.handleSubmit(onSubmit)}
-            className="w-4/5 space-y-3"
-          >
-            <FormField
-              control={form.control}
-              name="email"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Email</FormLabel>
-                  <FormControl>
-                    <Input placeholder="email" {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <FormField
-              control={form.control}
-              name="password"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Password</FormLabel>
-                  <FormControl>
-                    <Input placeholder="password" type="password" {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <Button disabled={loading} type="submit" className="w-full">
-              Submit
-            </Button>
-          </form>
-        </Form>
+      <div className="min-h-screen w-1/2 bg-white px-6 mx-auto flex flex-col items-center">
+        {/* 图片紧贴顶部 */}
+        <img
+          src="../../src/assets/logo.svg"
+          alt="Logo"
+          className="self-center"
+        />
+        {/*eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJjbThtbDUzc3AwMDAwcjVxb2tjczVjamw0IiwiZW1haWwiOiJ0ZXN0QGV4YW1wbGUuY29tIiwicm9sZSI6IlVTRVIiLCJpYXQiOjE3NDI3OTE4NDUsImV4cCI6MTc0MjgyNzg0NX0.dmZQ8rYKNO11mV1zbbaRwbHS86lswVYRFZJGRK_P8Rw*/}
+
+        {/* 表单上下左右居中 */}
+        <div className="flex-1 w-full flex items-center justify-center">
+          <Form {...form}>
+            <form
+              onSubmit={form.handleSubmit(onSubmit)}
+              className="w-4/5 space-y-3"
+            >
+              <FormField
+                control={form.control}
+                name="email"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>电子邮件</FormLabel>
+                    <FormControl>
+                      <Input placeholder="email" {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="password"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Password</FormLabel>
+                    <FormControl>
+                      <Input
+                        placeholder="password"
+                        type="password"
+                        {...field}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <Button disabled={loading} type="submit" className="w-full">
+                提交
+              </Button>
+            </form>
+          </Form>
+        </div>
       </div>
       <div className="w-full h-full flex flex-col items-center justify-center sm:hidden md:hidden lg:block bg-custom-bg bg-cover bg-center" />
     </div>

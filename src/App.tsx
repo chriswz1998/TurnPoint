@@ -6,6 +6,8 @@ import { AuthProvider } from '@/context/AuthContext.tsx'
 import PrivateRoute from '@/components/PrivateRout.tsx'
 import Layout from '@/layout/layout.tsx'
 import UploadFile from '@/upload-file'
+import Dashboard from '@/dashboard'
+import TestPage from '@/test'
 
 function App() {
   return (
@@ -22,7 +24,13 @@ function App() {
                 </PrivateRoute>
               }
             >
-              <Route path="/dashboard" element={<UploadFile />} />
+              <Route index element={<Dashboard />} />
+              <Route path="/Dashboard" element={<Dashboard />} />
+              <Route path="/UploadFile" element={<UploadFile />} />
+              <Route path="/Search" element={<UploadFile />} />
+              <Route path="/Report" element={<UploadFile />} />
+              <Route path="/Settings" element={<UploadFile />} />
+              <Route path="/TestPage" element={<TestPage />} />
             </Route>
           </Routes>
           <Toaster />
