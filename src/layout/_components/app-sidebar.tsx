@@ -5,7 +5,8 @@ import {
   GalleryVerticalEnd,
   Home,
   // SearchIcon,
-  Settings
+  Settings,
+  UserRoundPlus
 } from 'lucide-react'
 
 import { NavUser } from './nav-user'
@@ -47,9 +48,9 @@ const items = [
     icon: ChartLine
   },
   {
-    title: 'Settings',
-    url: '/Settings',
-    icon: Settings
+    title: 'Create Account',
+    url: '/CreateAccount',
+    icon: UserRoundPlus
   },
   {
     title: 'TestPage',

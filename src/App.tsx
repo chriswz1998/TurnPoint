@@ -9,6 +9,8 @@ import UploadFile from '@/upload-file'
 import Dashboard from '@/dashboard'
 import TestPage from '@/test'
 
+import AccountCreation from '@/createAccount/userCreation' //-------------------------
+
 import Reports from '@/reports/reportsPage.tsx' //-------------------------
 import ReportIntake from '@/reports/reportIntake' //-------------------------
 import ReportFlowThrough from '@/reports/reportFlowThrough' //-------------------------
@@ -43,7 +45,7 @@ function App() {
               <Route path="/UploadFile" element={<UploadFile />} />
               <Route path="/Search" element={<UploadFile />} />
               <Route path="/Report" element={<Reports />} />
-              <Route path="/Settings" element={<UploadFile />} />
+              <Route path="/CreateAccount" element={<AccountCreation />} />
               <Route path="/TestPage" element={<TestPage />} />
 
               <Route path="/report/intake-reporting" element={<ReportIntake />} /> {/*-------------------------*/}
