@@ -3,8 +3,8 @@ import toast from 'react-hot-toast'
 import { fetch } from '@tauri-apps/plugin-http'
 import { useNavigate } from 'react-router-dom'
 
-// const base_url = 'http://192.168.31.174:3000'
-const base_url = 'http://localhost:3000'
+const base_url = 'http://192.168.31.174:3000'
+// const base_url = 'http://localhost:3000'
 const local_token = localStorage.getItem('access_token')
 // @ts-ignore
 const useFetch = <IP, OP>() => {
