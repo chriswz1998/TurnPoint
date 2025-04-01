@@ -21,22 +21,9 @@ import {
   SelectItem,
   SelectTrigger,
 } from "@/components/ui/select.tsx";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import useHttp from "@/lib/use-http.ts";
 
-const data: losOfServiceProps[] = [
-  {
-    endDateTime: "27/1/2025",
-    individual: "Anderson, Jimmy (test)",
-    managerApproved: "Not answered",
-    programOrSite: "",
-    rationaleLOS: "",
-    reasonRestriction: "cxcds",
-    reviewTPCSLOS: "No",
-    staffReporting: "",
-    startDateTime: "24/1/2025",
-    relatedToIncident: "No",
-  },
-];
 const filters = [
   "Total Responses by Program/Site",
   "Avg Length of LOS by Program/Site",
@@ -54,6 +41,8 @@ const FormSchema = z.object({
 export default function LossOfServiceReport() {
   const [selectedFilter, setSelectedFilter] = useState("");
 
+  const { fetchData, data } = useHttp<any, losOfServiceProps[]>();
+
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
     defaultValues: {
@@ -64,6 +53,14 @@ export default function LossOfServiceReport() {
   function onSubmit(data: z.infer<typeof FormSchema>) {
     console.log(data);
   }
+
+  const getTableData = async () => {
+    await fetchData("report/cm8oxyrzy0029r101mmwk52fw");
+  };
+
+  useEffect(() => {
+    getTableData();
+  }, []);
 
   return (
     <div className="p-4 space-y-4">
@@ -105,7 +102,7 @@ export default function LossOfServiceReport() {
           </SelectContent>
         </Select>
       </div>
-      <DataTable columns={columns} data={data} />
+      <DataTable columns={columns} data={data || []} />
     </div>
   );
 }

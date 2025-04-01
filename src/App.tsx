@@ -9,19 +9,19 @@ import UploadFile from "@/upload-file";
 import Dashboard from "@/dashboard";
 import TestPage from "@/test";
 
-import AccountCreation from "@/createAccount/userCreation"; //-------------------------
+import AccountCreation from "@/createAccount/userCreation";
 
-import Reports from "@/reports/reportsPage.tsx"; //-------------------------
-import ReportIntake from "@/reports/reportIntake"; //-------------------------
-import ReportFlowThrough from "@/reports/flow-through"; //-------------------------
-import ReportRentSupplement from "@/reports/reportRentSupplementRequest"; //-------------------------
-import ReportGoalsProgress from "@/reports/reportGoalsProgress"; //-------------------------
-import ReportSafetyPlan from "@/reports/reportSafetyPlan"; //-------------------------
-import ReportOverdoseSafetyPlan from "@/reports/reportOverdoseSafetyPlan"; //-------------------------
-import ReportIncident from "@/reports/reportIncident"; //-------------------------
-import ReportIndividuals from "@/reports/reportIndividuals"; //-------------------------
-import ReportShelterDiversion from "@/reports/reportShelterDiversion"; //-------------------------
-import ReportSiteList from "@/reports/reportIntake"; //-------------------------
+import Reports from "@/reports/reportsPage.tsx";
+import ReportIntake from "@/reports/reportIntake";
+import ReportFlowThrough from "@/reports/flow-through";
+import ReportRentSupplement from "@/reports/reportRentSupplementRequest";
+import ReportGoalsProgress from "@/reports/reportGoalsProgress";
+import ReportSafetyPlan from "@/reports/reportSafetyPlan";
+import ReportOverdoseSafetyPlan from "@/reports/reportOverdoseSafetyPlan";
+import ReportIncident from "@/reports/reportIncident";
+import ReportIndividuals from "@/reports/reportIndividuals";
+import ReportShelterDiversion from "@/reports/reportShelterDiversion";
+import ReportSiteList from "@/reports/reportIntake";
 import ReportLOS from "./reports/loss-of-service/index.tsx";
 
 function App() {
