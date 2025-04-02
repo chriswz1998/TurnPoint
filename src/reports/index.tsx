@@ -3,6 +3,10 @@ import { Input } from '@/components/ui/input'
 import { Card, CardContent, CardTitle } from '@/components/ui/card'
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
+import { columns } from "./_components/columns";
+import { DataTable } from '@/reports/_components/data-table.tsx'
+import { DataTablePagination } from '@/reports/_components/table-pagination.tsx'
+import useHttp from '@/lib/use-http.ts'
 
 const reports = [
   'Intake Reporting',
@@ -18,8 +22,28 @@ const reports = [
   'Site List'
 ]
 
+export interface RequestDataProps {
+  data: {
+    id : string
+    filename:  string
+    filetypeId: string
+    uploadtime: Date
+  }
+  pagination: {
+    page: number
+    pageSize: number
+    total: number
+    totalPages: number
+  }
+}
+
+
+
 export default function Reports() {
   const [search, setSearch] = useState('')
+
+  const {fetchData, data:res} = useHttp<any, RequestDataProps>()
+
   const filteredReports = reports.filter((report) =>
     report.toLowerCase().includes(search.toLowerCase())
   )
@@ -30,8 +54,24 @@ export default function Reports() {
     navigate(`/report/${report.replace(/\s+/g, '-').toLowerCase()}`)
   }
 
+  const getData = async () => {
+
+  }
+
   return (
     <GradientBackgroundContainer className="bg-white w-full h-full py-24 sm:py-32">
+      <DataTable columns={columns} data={res} />
+      <DataTablePagination
+        page={res.pagination.currentPage}
+        pageSize={res.pagination.pageSize}
+        total={res.pagination.total}
+        totalPages={res.pagination.totalPages}
+        onPageChange={(page) => setCurrentPage(page)}
+        onPageSizeChange={(size) => {
+          setPageSize(size)
+          setCurrentPage(1) // 通常更换 pageSize 会重置回第一页
+        }}
+      />
       <div className="mx-auto max-w-7xl px-6 lg:px-8">
         <div className="mx-auto max-w-2xl lg:text-center">
           <h2 className="text-4xl font-semibold tracking-tight text-gray-900 sm:text-5xl">

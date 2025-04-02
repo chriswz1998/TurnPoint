@@ -11,7 +11,7 @@ import TestPage from "@/test";
 
 import AccountCreation from "@/createAccount/userCreation";
 
-import Reports from "@/reports/reportsPage.tsx";
+import Reports from "@/reports";
 import ReportIntake from "@/reports/reportIntake";
 import ReportFlowThrough from "@/reports/flow-through";
 import ReportRentSupplement from "@/reports/reportRentSupplementRequest";
