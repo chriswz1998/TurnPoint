@@ -1,42 +1,47 @@
-"use client"
+"use client";
 
-import { ColumnDef } from "@tanstack/react-table"
-import { MoreHorizontal } from "lucide-react"
+import { ColumnDef } from "@tanstack/react-table";
+import { MoreHorizontal } from "lucide-react";
 
-import { Button } from "@/components/ui/button"
+import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu"
+} from "@/components/ui/dropdown-menu";
+import { Link } from "react-router-dom";
 // This type is used to define the shape of our data.
 // You can use a Zod schema here if you want.
-export type Payment = {
-  id: string
-  amount: number
-  status: "pending" | "processing" | "success" | "failed"
-  email: string
+export interface ColumnsHeaderProps {
+  id: string;
+  filename: string;
+  filetypeId: string;
+  uploadtime: Date;
+  filetype: {
+    id: string;
+    typename: string;
+    createAt: Date;
+  };
 }
 
-export const columns: ColumnDef<Payment>[] = [
+export const columns: ColumnDef<ColumnsHeaderProps>[] = [
   {
-    accessorKey: "status",
-    header: "Status",
+    accessorKey: "filename",
+    header: "File Name",
   },
   {
-    accessorKey: "email",
-    header: "Email",
+    accessorKey: "filetypeId",
+    header: "Filetype Id",
   },
   {
-    accessorKey: "amount",
-    header: "Amount",
+    accessorKey: "uploadtime",
+    header: "upload time",
   },
   {
-    id: "actions",
+    accessorKey: "id",
     header: "actions",
     cell: ({ row }) => {
-      console.log(row)
       return (
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
@@ -46,10 +51,16 @@ export const columns: ColumnDef<Payment>[] = [
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end">
-            <DropdownMenuItem>Check Report</DropdownMenuItem>
+            <DropdownMenuItem
+              onClick={() => {
+                console.log(row.original?.filetype.typename);
+              }}
+            >
+              <Link to={`row.original?.filetype.typename`}> Check Report</Link>
+            </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
-      )
+      );
     },
   },
-]
+];

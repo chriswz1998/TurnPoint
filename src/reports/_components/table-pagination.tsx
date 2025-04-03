@@ -1,107 +1,105 @@
 import {
-  ChevronLeft,
-  ChevronRight,
-  ChevronsLeft,
-  ChevronsRight,
-} from "lucide-react"
+  Pagination,
+  PaginationContent,
+  PaginationItem,
+  PaginationLink,
+  PaginationPrevious,
+  PaginationNext,
+  PaginationEllipsis,
+} from "@/components/ui/pagination";
 
-import { Button } from "@/components/ui/button"
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select"
-
-interface PaginationProps {
-  page: number
-  pageSize: number
-  total: number
-  totalPages: number
-  onPageChange: (page: number) => void
-  onPageSizeChange: (size: number) => void
+interface Props {
+  currentPage: number;
+  totalPages: number;
+  onPageChange: (page: number) => void;
 }
 
-export function DataTablePagination({
-                                      page,
-                                      pageSize,
-                                      total,
-                                      totalPages,
-                                      onPageChange,
-                                      onPageSizeChange,
-                                    }: PaginationProps) {
+export function CustomPagination({
+  currentPage,
+  totalPages,
+  onPageChange,
+}: Props) {
+  // 动态生成页码数组，最多显示 5 页（你也可以自定义更多）
+  const generatePageNumbers = () => {
+    const pages = [];
+    const maxVisible = 5;
+
+    let startPage = Math.max(1, currentPage - Math.floor(maxVisible / 2));
+    let endPage = startPage + maxVisible - 1;
+
+    if (endPage > totalPages) {
+      endPage = totalPages;
+      startPage = Math.max(1, endPage - maxVisible + 1);
+    }
+
+    for (let i = startPage; i <= endPage; i++) {
+      pages.push(i);
+    }
+
+    return pages;
+  };
+
   return (
-    <div className="flex items-center justify-between px-2 py-2">
-      <div className="text-sm text-muted-foreground">
-        Total: {total} row(s)
-      </div>
-      <div className="flex items-center space-x-6 lg:space-x-8">
-        {/* Page size selector */}
-        <div className="flex items-center space-x-2">
-          <p className="text-sm font-medium">Rows per page</p>
-          <Select
-            value={`${pageSize}`}
-            onValueChange={(value) => onPageSizeChange(Number(value))}
-          >
-            <SelectTrigger className="h-8 w-[70px]">
-              <SelectValue placeholder={pageSize} />
-            </SelectTrigger>
-            <SelectContent side="top">
-              {[10, 20, 30, 40, 50].map((size) => (
-                <SelectItem key={size} value={`${size}`}>
-                  {size}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
-        </div>
+    <Pagination>
+      <PaginationContent>
+        {/* 上一页 */}
+        <PaginationItem>
+          <PaginationPrevious
+            href="#"
+            onClick={(e) => {
+              e.preventDefault();
+              if (currentPage > 1) onPageChange(currentPage - 1);
+            }}
+          />
+        </PaginationItem>
 
-        {/* Page indicator */}
-        <div className="flex w-[120px] items-center justify-center text-sm font-medium">
-          Page {page} of {totalPages}
-        </div>
+        {/* 数字页码 */}
+        {generatePageNumbers().map((page) => (
+          <PaginationItem key={page}>
+            <PaginationLink
+              href="#"
+              isActive={page === currentPage}
+              onClick={(e) => {
+                e.preventDefault();
+                onPageChange(page);
+              }}
+            >
+              {page}
+            </PaginationLink>
+          </PaginationItem>
+        ))}
 
-        {/* Navigation buttons */}
-        <div className="flex items-center space-x-2">
-          <Button
-            variant="outline"
-            className="hidden h-8 w-8 p-0 lg:flex"
-            onClick={() => onPageChange(1)}
-            disabled={page === 1}
-          >
-            <span className="sr-only">Go to first page</span>
-            <ChevronsLeft />
-          </Button>
-          <Button
-            variant="outline"
-            className="h-8 w-8 p-0"
-            onClick={() => onPageChange(page - 1)}
-            disabled={page === 1}
-          >
-            <span className="sr-only">Go to previous page</span>
-            <ChevronLeft />
-          </Button>
-          <Button
-            variant="outline"
-            className="h-8 w-8 p-0"
-            onClick={() => onPageChange(page + 1)}
-            disabled={page === totalPages}
-          >
-            <span className="sr-only">Go to next page</span>
-            <ChevronRight />
-          </Button>
-          <Button
-            variant="outline"
-            className="hidden h-8 w-8 p-0 lg:flex"
-            onClick={() => onPageChange(totalPages)}
-            disabled={page === totalPages}
-          >
-            <span className="sr-only">Go to last page</span>
-            <ChevronsRight />
-          </Button>
-        </div>
-      </div>
-    </div>
-  )
+        {/* 省略号 */}
+        {currentPage + 2 < totalPages && (
+          <>
+            <PaginationItem>
+              <PaginationEllipsis />
+            </PaginationItem>
+            <PaginationItem>
+              <PaginationLink
+                href="#"
+                onClick={(e) => {
+                  e.preventDefault();
+                  onPageChange(totalPages);
+                }}
+              >
+                {totalPages}
+              </PaginationLink>
+            </PaginationItem>
+          </>
+        )}
+
+        {/* 下一页 */}
+        <PaginationItem>
+          <PaginationNext
+            href="#"
+            onClick={(e) => {
+              e.preventDefault();
+              if (currentPage < totalPages) onPageChange(currentPage + 1);
+            }}
+          />
+        </PaginationItem>
+      </PaginationContent>
+    </Pagination>
+  );
 }
