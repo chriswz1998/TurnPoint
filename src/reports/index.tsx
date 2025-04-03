@@ -44,6 +44,12 @@ export default function Reports() {
     getData(1, search);
   };
 
+  const toClear = async () => {
+    setSearch("");
+    setSearchKey("");
+    await getData(1, "");
+  };
+
   const getData = async (page: number, key = searchKey) => {
     await fetchData("file/fileByPage", "POST", {
       page,
@@ -53,9 +59,8 @@ export default function Reports() {
   };
 
   const debouncedPageChange = useMemo(() => {
-    return debounce((page: number) => {
-      console.log("翻页请求触发：", page);
-      getData(page);
+    return debounce(async (page: number) => {
+      await getData(page);
     }, 300);
   }, [searchKey]);
 
@@ -68,8 +73,6 @@ export default function Reports() {
   useEffect(() => {
     getData(1);
   }, []);
-
-  //TODO: after search, Can't back to table without search ke word. need do sth.
 
   return (
     <GradientBackgroundContainer className="bg-white w-full h-full">
@@ -92,6 +95,11 @@ export default function Reports() {
             onChange={(e) => setSearch(e.target.value)}
           />
           <Button onClick={toSearch}>Search</Button>
+          {searchKey ? (
+            <Button variant="ghost" onClick={toClear}>
+              Clear
+            </Button>
+          ) : null}
         </div>
 
         <DataTable columns={columns} data={res?.data ?? []} />
