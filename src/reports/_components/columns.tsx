@@ -10,7 +10,8 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
+import { formatDate } from "@/lib/utils.ts";
 // This type is used to define the shape of our data.
 // You can use a Zod schema here if you want.
 export interface ColumnsHeaderProps {
@@ -37,11 +38,13 @@ export const columns: ColumnDef<ColumnsHeaderProps>[] = [
   {
     accessorKey: "uploadtime",
     header: "upload time",
+    cell: ({ row }) => formatDate(row.original.uploadtime),
   },
   {
     accessorKey: "id",
     header: "actions",
     cell: ({ row }) => {
+      const navigate = useNavigate();
       return (
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
@@ -53,10 +56,18 @@ export const columns: ColumnDef<ColumnsHeaderProps>[] = [
           <DropdownMenuContent align="end">
             <DropdownMenuItem
               onClick={() => {
-                console.log(row.original?.filetype.typename);
+                const typename = row.original?.filetype?.typename;
+                const id = row.original?.id;
+
+                if (typename === "Flow Through" && id) {
+                  navigate(`/report/flow-through/${id}`);
+                }
+                if (typename === "Loss of Service" && id) {
+                  navigate(`/report/loss-of-service/${id}`);
+                }
               }}
             >
-              <Link to={`row.original?.filetype.typename`}> Check Report</Link>
+              Check Report
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
