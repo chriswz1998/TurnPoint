@@ -16,9 +16,17 @@ import {
   useSidebar
 } from '@/components/ui/sidebar'
 import { UserProps } from '@/context/AuthContext.tsx'
+import { useNavigate } from 'react-router-dom'
 
 export function NavUser({ user }: { user: UserProps | null }) {
+  const navigate = useNavigate();
+
   const { isMobile } = useSidebar()
+
+  const logout = () => {
+    localStorage.removeItem("access_token");
+    navigate("/login");
+  }
 
   return (
     <SidebarMenu>
@@ -46,7 +54,7 @@ export function NavUser({ user }: { user: UserProps | null }) {
             align="end"
             sideOffset={4}
           >
-            <DropdownMenuItem>
+            <DropdownMenuItem onClick={logout}>
               <LogOut />
               Log out
             </DropdownMenuItem>
