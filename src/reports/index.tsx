@@ -30,27 +30,31 @@ export interface RequestDataProps {
 }
 
 export default function Reports() {
-  const [search, setSearch] = useState("");
-  const [searchKey, setSearchKey] = useState("");
-
+  const [search, setSearch] = useState(""); // Store the search query input
+  const [searchKey, setSearchKey] = useState(""); // Store the search query for filtering
   const { fetchData, data: res } = useHttp<any, RequestDataProps>();
+  const [filteredData, setFilteredData] = useState(res?.data ?? []); // Store filtered data
 
+  // Function to handle the search when the user clicks "Search"
   const toSearch = () => {
     if (!search.trim()) {
       toast.error("Please enter a search keyword.");
       return;
     }
-    setSearchKey(search);
-    getData(1, search);
+    setSearchKey(search); // Set the search key
+    getData(1, search); // Fetch data based on the search key
   };
 
+  // Function to clear the search input and reset the data
   const toClear = async () => {
-    setSearch("");
-    setSearchKey("");
-    await getData(1, "");
+    setSearch(""); // Clear the search input
+    setSearchKey(""); // Reset the search key
+    await getData(1, ""); // Fetch data without filtering
   };
 
+  // Function to fetch the data from the server
   const getData = async (page: number, key = searchKey) => {
+    console.log("Searching with key:", key);
     await fetchData("file/fileByPage", "POST", {
       page,
       pageSize: 10,
@@ -58,6 +62,7 @@ export default function Reports() {
     });
   };
 
+  // Debounced page change handler to avoid multiple requests on page change
   const debouncedPageChange = useMemo(() => {
     return debounce(async (page: number) => {
       await getData(page);
@@ -66,13 +71,24 @@ export default function Reports() {
 
   useEffect(() => {
     return () => {
-      debouncedPageChange.cancel();
+      debouncedPageChange.cancel(); // Cleanup debounced function on unmount
     };
   }, [debouncedPageChange]);
 
+  // Fetch data on initial render
   useEffect(() => {
     getData(1);
   }, []);
+
+  // Filter data only after the user clicks "Search"
+  useEffect(() => {
+    if (searchKey) {
+      const result = res?.data?.filter((item) =>
+        item.filename.toLowerCase().includes(searchKey.toLowerCase())
+      );
+      setFilteredData(result ?? []); // Update the filtered data
+    }
+  }, [searchKey, res?.data]);
 
   return (
     <GradientBackgroundContainer className="bg-white w-full h-full">
@@ -86,13 +102,13 @@ export default function Reports() {
           </p>
         </div>
 
-        {/* 搜索输入框和按钮 */}
+        {/* Search input and button */}
         <div className="flex items-center justify-center space-x-4">
           <Input
             type="text"
             placeholder="Search reports..."
             value={search}
-            onChange={(e) => setSearch(e.target.value)}
+            onChange={(e) => setSearch(e.target.value)} // Update the search input
           />
           <Button onClick={toSearch}>Search</Button>
           {searchKey ? (
@@ -102,12 +118,14 @@ export default function Reports() {
           ) : null}
         </div>
 
-        <DataTable columns={columns} data={res?.data ?? []} />
+        {/* Display filtered data */}
+        <DataTable columns={columns} data={filteredData ?? []} />
 
+        {/* Pagination component */}
         <CustomPagination
           currentPage={res?.pagination.page ?? 1}
           totalPages={res?.pagination.totalPages ?? 1}
-          onPageChange={(page) => debouncedPageChange(page)}
+          onPageChange={(page) => debouncedPageChange(page)} // Handle page change
         />
       </div>
     </GradientBackgroundContainer>
