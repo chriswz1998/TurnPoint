@@ -10,6 +10,7 @@ import {
 import React from "react";
 import { SidebarTrigger } from "@/components/ui/sidebar.tsx";
 import { Separator } from "@/components/ui/separator.tsx";
+import { Button } from "@/components/ui/button.tsx";
 
 const breadcrumbNameMap: Record<string, string> = {
   "/Dashboard": "Dashboard",
@@ -36,9 +37,16 @@ export const Header = () => {
   const pathnames = location.pathname.split("/").filter(Boolean);
 
   return (
-    <header className="h-16 w-full border-b bg-white dark:bg-neutral-950 px-6 shadow-sm flex items-center justify-between">
+    <header className="p-4 w-full border-b bg-white dark:bg-neutral-950 px-6 shadow-sm flex items-center justify-between">
       {/* 左边：侧边栏按钮 + 面包屑 */}
       <div className="flex items-center gap-4">
+        <Button
+          onClick={() => {
+            console.log(pathnames);
+          }}
+        >
+          show
+        </Button>
         <SidebarTrigger className="-ml-1" />
         <Separator orientation="vertical" className="h-6" />
         <Breadcrumb>

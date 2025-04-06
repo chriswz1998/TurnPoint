@@ -1,52 +1,40 @@
 import { flowThroughDataProps } from "@/reports/flow-through/_components/columns.tsx";
 
 interface DateRange {
-  from: Date;
-  to: Date;
+  from?: Date;
+  to?: Date;
 }
 
-interface FilterControl {
-  dateRange: DateRange;
-  totalResponse: boolean;
-}
-
-interface FilterResult {
-  filteredData: flowThroughDataProps[];
-  count: number | null;
-}
-
-/**
- * 根据 dateRange 过滤数据，同时根据 totalResponse 是否计算 count
- * @param data - 原始数据
- * @param control - 控制项，包括 dateRange 和 totalResponse
- * @param includeExitDate - 是否也过滤 exitDate（默认 false）
- * @returns { filteredData, count }
- */
-export function filterDataAndCount(
+export function filterData(
   data: flowThroughDataProps[],
-  control: FilterControl,
-  includeExitDate: boolean = false,
-): FilterResult {
-  const { dateRange, totalResponse } = control;
+  dateRange: DateRange,
+): flowThroughDataProps[] | undefined {
+  const { from, to } = dateRange;
 
-  const filteredData = data.filter((item) => {
-    const start = new Date(item.startDate);
-    const isStartValid = start >= dateRange.from && start <= dateRange.to;
+  // 没有任何过滤条件，返回全部数据
+  if (!from && !to) {
+    return data;
+  }
 
-    if (!includeExitDate) return isStartValid;
+  if (from && !to) {
+    return data.filter((item) => {
+      const startDate = new Date(item.startDate);
+      return startDate >= from;
+    });
+  }
 
-    const exit = item.exitDate ? new Date(item.exitDate) : null;
-    const isExitValid = exit
-      ? exit >= dateRange.from && exit <= dateRange.to
-      : true;
+  if (!from && to) {
+    return data.filter((item) => {
+      const exitDate = item.exitDate ? new Date(item.exitDate) : null;
+      return exitDate ? exitDate <= to : false;
+    });
+  }
 
-    return isStartValid && isExitValid;
-  });
-
-  const count = totalResponse ? filteredData.length : null;
-
-  return {
-    filteredData,
-    count,
-  };
+  if (from && to) {
+    return data.filter((item) => {
+      const startDate = new Date(item.startDate);
+      const exitDate = item.exitDate ? new Date(item.exitDate) : null;
+      return startDate >= from && exitDate !== null && exitDate <= to;
+    });
+  }
 }
