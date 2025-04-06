@@ -13,7 +13,6 @@ import {
 import { useNavigate } from "react-router-dom";
 import { formatDate } from "@/lib/utils.ts";
 // This type is used to define the shape of our data.
-// You can use a Zod schema here if you want.
 export interface ColumnsHeaderProps {
   id: string;
   filename: string;
@@ -64,6 +63,30 @@ export const columns: ColumnDef<ColumnsHeaderProps>[] = [
                 }
                 if (typename === "Loss of Service" && id) {
                   navigate(`/report/loss-of-service/${id}`);
+                }
+                if (typename === "Goals and Progress" && id) {
+                  navigate(`/report/goals-and-progress/${id}`);
+                }
+                if (typename === "Incident Report" && id) {
+                  navigate(`/report/incident-report/${id}`);
+                }
+                if (typename === "Individuals" && id) {
+                  navigate(`/report/individuals-report/${id}`);
+                }
+                if (typename === "Overdose Safety Plan" && id) {
+                  navigate(`/report/overdose-safety-plan/${id}`);
+                }
+                if (typename === "Safety Plan" && id) {
+                  navigate(`/report/safety-plan/${id}`);
+                }
+                if (typename === "Rent Supplement Request" && id) {
+                  navigate(`/report/rent-supplement-request/${id}`);
+                }
+                if (typename === "Shelter Diversion Follow-Up Log" && id) {
+                  navigate(`/report/shelter-diversion-log/${id}`);
+                }
+                if (typename === "Site List" && id) {
+                  navigate(`/report/site-list/${id}`);
                 }
               }}
             >

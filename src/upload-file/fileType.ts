@@ -1,3 +1,39 @@
+export interface Type1Report {
+  IntakeAssessmentByPreviousLivingSituation: IntakeAssessmentByPreviousLivingSituation[],
+  IntakeAssessmentByImmediateNeedsUponIntake: IntakeAssessmentByImmediateNeedsUponIntake[],
+  SelfIdentifiersByCitizenImmigrationSatus: SelfIdentifiersByCitizenImmigrationSatus[],
+  SelfIdentifiersByVeteranStatus: SelfIdentifiersByVeteranStatus[],
+  IncomeEmploymentByIncomeType: IncomeEmploymentByIncomeTypes[],
+}
+
+export interface IntakeAssessmentByPreviousLivingSituation {
+  'Previous Living Situation': string;
+  'Count': number;
+  'Percentage(%)': string;
+}
+export interface IntakeAssessmentByImmediateNeedsUponIntake {
+  'Immediate Need': string;
+  'Count': number;
+  'Percentage(%)': string;
+}
+export interface SelfIdentifiersByCitizenImmigrationSatus {
+  'Status': string;
+  'Count': number;
+  'Percentage(%)': string;
+}
+export interface SelfIdentifiersByVeteranStatus {
+  'Status': string;
+  'Count': number;
+  'Percentage(%)': string;
+}
+export interface IncomeEmploymentByIncomeTypes {
+  'Type': string;
+  'Count': number;
+  'Percentage(%)': string;
+}
+
+
+
 export interface Type2Individual {
   Individual: string
   'Program or Site': string
@@ -91,10 +127,21 @@ export interface Type10Individual {
   'Eviction Prevention': string
 }
 
+export interface Type11Site {
+  Site: string
+  'Housing Type': string
+  'Site Phone Number': string
+  Address: string
+  City: string
+  'Manager or Site': string
+  "Manager's Phone Number": string
+}
+
 export interface ParsedData {
   filename: string
   filetype: string
   records?:
+    | Type1Report[]
     | Type2Individual[]
     | Type3Individual[]
     | Type4Individual[]
@@ -104,4 +151,5 @@ export interface ParsedData {
     | Type8Incident[]
     | Type9Individual[]
     | Type10Individual[]
+    | Type11Site[]
 }
