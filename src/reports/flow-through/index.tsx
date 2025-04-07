@@ -19,6 +19,7 @@ import useHttp from "@/lib/use-http.ts";
 import { useEffect, useState } from "react";
 import { filterData } from "@/lib/filterByDateRange.ts";
 import { CheckedState } from "@radix-ui/react-checkbox";
+import FlowThroughCharts from "@/reports/flow-through/_components/chart.tsx";
 
 export default function FlowThroughReport() {
   const { id } = useParams();
@@ -28,6 +29,8 @@ export default function FlowThroughReport() {
     flowThroughDataProps[] | null
   >();
   const [tableData, setTableData] = useState<flowThroughDataProps[] | null>();
+  const [chartType, setChartType] = useState<boolean>(false);
+
   const { fetchData, loading } = useHttp<any, flowThroughDataProps[]>();
   const [showTotalResponse, setShowTotalResponse] =
     useState<CheckedState>(false);
@@ -46,6 +49,10 @@ export default function FlowThroughReport() {
     setStartDate(undefined);
     setEndDate(undefined);
     setShowTotalResponse(false);
+  };
+
+  const SwitchToChart = () => {
+    setChartType(!chartType);
   };
 
   const getData = async () => {
@@ -69,6 +76,7 @@ export default function FlowThroughReport() {
     <div className="p-4 space-y-4">
       <div className="sticky top-0 left-0 bg-white z-50 flex flex-col justify-center space-y-4">
         <h2 className="text-2xl font-semibold">Flow-Through Report</h2>
+        {/*{JSON.stringify(tableData)}*/}
         <div className="flex items-center space-x-4">
           <Popover>
             <PopoverTrigger asChild>
@@ -133,9 +141,21 @@ export default function FlowThroughReport() {
           <Button onClick={clearFilter} variant="outline">
             Clear Filter
           </Button>
+          <Button
+            variant={"ghost"}
+            className="inline-block"
+            onClick={SwitchToChart}
+          >
+            Switch to Chart
+          </Button>
         </div>
       </div>
-      <DataTable columns={columns} data={tableData ?? []} />
+      {chartType ? (
+        <FlowThroughCharts data={tableData ?? []} />
+      ) : (
+        <DataTable columns={columns} data={tableData ?? []} />
+      )}
+
       <div>{showTotalResponse && <p>total is {tableData?.length}</p>}</div>
     </div>
   );
