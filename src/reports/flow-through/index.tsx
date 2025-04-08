@@ -81,6 +81,10 @@ export default function FlowThroughReport() {
       `report/${id}`,
       "GET",
     )) as flowThroughDataProps[];
+
+    console.log("Fetched Data: ", res);
+    console.log("ID:", id);
+    
     setTableData(res);
   };
 
