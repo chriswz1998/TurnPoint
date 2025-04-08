@@ -141,11 +141,7 @@ export default function FlowThroughReport() {
           <Button onClick={clearFilter} variant="outline">
             Clear Filter
           </Button>
-          <Button
-            variant={"ghost"}
-            className="inline-block"
-            onClick={SwitchToChart}
-          >
+          <Button variant={"ghost"} onClick={SwitchToChart}>
             Switch to Chart
           </Button>
         </div>
