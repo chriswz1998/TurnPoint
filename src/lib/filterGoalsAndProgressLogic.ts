@@ -60,12 +60,15 @@ export function filterData({
     );
   }
 
-  if (form.getValues().goalType) {
-    filteredData = filteredData.filter((data) =>
-      data.goalType
-        .toLowerCase()
-        .includes(form.getValues().goalType?.toLowerCase() ?? "")
-    );
+  const goalTypeValue = form.getValues().goalType?.trim(); 
+
+  if (goalTypeValue) {
+    filteredData = filteredData.filter((data) => {
+      return (
+        data.goalType &&
+        data.goalType.toLowerCase().includes(goalTypeValue.toLowerCase())
+      );
+    });
   }
 
   return filteredData;

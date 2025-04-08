@@ -79,6 +79,7 @@ export default function GoalsProgressReport() {
     defaultValues: {
       individual: undefined,
       programSite: undefined,
+      goalType: undefined,
     },
   });
 
@@ -100,6 +101,11 @@ export default function GoalsProgressReport() {
     setDiscontinuedDate(undefined);
     setCompletionDate(undefined);
     setShowTotalResponse(false);
+    form.reset({
+      individual: "",
+      programSite: "",
+      goalType: "",
+    })
   };
 
   const SwitchToChart = () => {
@@ -148,7 +154,6 @@ export default function GoalsProgressReport() {
                   </FormItem>
                 )}
               />
-              <Button type="submit">Search</Button>
             </form>
           </Form>
           <Form {...form}>
@@ -167,7 +172,6 @@ export default function GoalsProgressReport() {
                   </FormItem>
                 )}
               />
-              <Button type="submit">Search</Button>
             </form>
           </Form>
           <Form {...form}>
@@ -186,12 +190,11 @@ export default function GoalsProgressReport() {
                   </FormItem>
                 )}
               />
-              <Button type="submit">Search</Button>
             </form>
           </Form>
         </div>
 
-        <div className="flex items-center space-x-[120px]">
+        <div className="flex items-center space-x-[160px]">
           <div className="flex flex-col space-y-4">
             <Popover>
               <PopoverTrigger asChild>
