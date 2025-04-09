@@ -1,14 +1,4 @@
 import { Button } from "@/components/ui/button.tsx";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm } from "react-hook-form";
-import { z } from "zod";
-
-import {
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-} from "@/components/ui/form.tsx";
 import { Input } from "@/components/ui/input.tsx";
 import { DataTable } from "@/reports/safety-plan/_components/data-table";
 import {
@@ -20,83 +10,91 @@ import {
   SelectContent,
   SelectItem,
   SelectTrigger,
+  SelectValue,
 } from "@/components/ui/select.tsx";
 import { useEffect, useState } from "react";
 import useHttp from "@/lib/use-http.ts";
+import { useParams } from "react-router-dom";
+import { searchByIndividual } from "@/reports/safety-plan/lib/searchIndividual.ts";
+import { filterData, FilterType } from "@/reports/safety-plan/lib/filter.ts";
 
 const filters = [
-  "Program/Site",
+  {
+    value: "Program/Site",
+    label: "Program/Site",
+  },
 ];
 
-const FormSchema = z.object({
-  individual: z.string(),
-});
-
 export default function SafetyPlan() {
-  const [selectedFilter, setSelectedFilter] = useState("");
+  const { id } = useParams();
+  const [searchValue, setSearchValue] = useState<string | undefined>();
+  const [originalData, setOriginalData] = useState<safetyPlanProps[] | null>();
+  const [tableData, setTableData] = useState<safetyPlanProps[] | null>();
 
-  const { fetchData, data } = useHttp<any, safetyPlanProps[]>();
+  const { fetchData, loading } = useHttp<any, safetyPlanProps[]>();
 
-  const form = useForm<z.infer<typeof FormSchema>>({
-    resolver: zodResolver(FormSchema),
-    defaultValues: {
-      individual: undefined,
-    },
-  });
+  const search = () => {
+    const result = searchByIndividual(originalData ?? [], searchValue ?? "");
+    setTableData(result);
+  };
 
-  function onSubmit(data: z.infer<typeof FormSchema>) {
-    console.log(data);
-  }
+  const filterTable = (value: FilterType) => {
+    const filtered = filterData(originalData ?? [], value);
+    setTableData(filtered);
+  };
 
-  const getTableData = async () => {
-    await fetchData("report/cm8oxyrzy0029r101mmwk52fw");
+  const clearSearch = async () => {
+    setTableData(originalData);
+    setSearchValue(undefined);
+  };
+
+  const getData = async () => {
+    const res = (await fetchData(`report/${id}`, "GET")) as safetyPlanProps[];
+
+    setTableData(res);
+    setOriginalData(res);
   };
 
   useEffect(() => {
-    getTableData();
+    getData();
   }, []);
+
+  if (loading) {
+    return <div>loading...</div>;
+  }
 
   return (
     <div className="p-4 space-y-4">
       <h2 className="text-2xl font-semibold">Safety Plan Report</h2>
       <div className="flex justify-between">
-        <Form {...form}>
-          <form
-            onSubmit={form.handleSubmit(onSubmit)}
-            className="flex items-center space-x-4"
-          >
-            <FormField
-              control={form.control}
-              name="individual"
-              render={({ field }) => (
-                <FormItem>
-                  <FormControl>
-                    <FormItem>
-                      <FormControl>
-                        <Input placeholder="search individual" {...field} />
-                      </FormControl>
-                    </FormItem>
-                  </FormControl>
-                </FormItem>
-              )}
-            />
-            <Button type="submit">Search</Button>
-          </form>
-        </Form>
-        <Select onValueChange={setSelectedFilter}>
-          <SelectTrigger className="w-[260px]">
-            {selectedFilter || "Filter by"}
-          </SelectTrigger>
-          <SelectContent>
-            {filters.map((filter) => (
-              <SelectItem key={filter} value={filter}>
-                {filter}
-              </SelectItem>
-            ))}
-          </SelectContent>
-        </Select>
+        <div className="flex space-x-4">
+          <Input
+            className={"w-72"}
+            placeholder="search individual"
+            value={searchValue ?? ""}
+            onChange={(e) => setSearchValue(e.target.value)}
+          />
+          <Button onClick={search}>Search</Button>
+          <Button onClick={clearSearch} variant="outline">
+            Clear Search
+          </Button>
+        </div>
+        <div>
+          <Select onValueChange={filterTable}>
+            <SelectTrigger className="w-[260px]">
+              <SelectValue placeholder="Select a filter" />
+            </SelectTrigger>
+            <SelectContent>
+              {filters.map((filter) => (
+                <SelectItem key={filter.value} value={filter.value}>
+                  {filter.label}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+        </div>
       </div>
-      <DataTable columns={columns} data={data || []} />
+      <DataTable columns={columns} data={tableData || []} />
     </div>
   );
 }

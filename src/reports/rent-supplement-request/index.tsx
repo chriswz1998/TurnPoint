@@ -15,11 +15,11 @@ import {
 import { useEffect, useState } from "react";
 import useHttp from "@/lib/use-http.ts";
 import { useParams } from "react-router-dom";
-import { searchByIndividual } from "@/lib/utils.ts";
 import {
   filterData,
   FilterType,
 } from "@/reports/rent-supplement-request/lib/filter.ts";
+import { searchByIndividual } from "@/reports/rent-supplement-request/lib/searchIndividual.ts";
 
 const filters = [
   {

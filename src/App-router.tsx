@@ -1,6 +1,5 @@
 import { Routes, Route } from "react-router-dom";
 import { Login } from "@/auth/login.tsx";
-import PrivateRoute from "@/components/PrivateRout.tsx";
 import Layout from "@/layout/layout.tsx";
 import UploadFile from "@/upload-file";
 import Dashboard from "@/dashboard";
@@ -19,18 +18,11 @@ import ReportIndividuals from "@/reports/individuals-report";
 import ReportShelterDiversion from "@/reports/shelter-diversion-log";
 import ReportSiteList from "@/reports/site-list";
 import ReportLOS from "@/reports/loss-of-service/index.tsx";
-// TODO replace the Breadcrumb to page title.
+
 const AppRoutes = () => (
   <Routes>
     <Route path="/login" element={<Login />} />
-    <Route
-      path="/"
-      element={
-        <PrivateRoute>
-          <Layout />
-        </PrivateRoute>
-      }
-    >
+    <Route path="/" element={<Layout />}>
       <Route index element={<Dashboard />} />
       <Route path="/Dashboard" element={<Dashboard />} />
       <Route path="/UploadFile" element={<UploadFile />} />
@@ -42,13 +34,28 @@ const AppRoutes = () => (
       <Route path="/report/intake-reporting" element={<ReportIntake />} />
       <Route path="/report/flow-through/:id" element={<ReportFlowThrough />} />
       <Route path="/report/loss-of-service/:id" element={<ReportLOS />} />
-      <Route path="/report/goals-and-progress/:id" element={<ReportGoalsProgress />} />
+      <Route
+        path="/report/goals-and-progress/:id"
+        element={<ReportGoalsProgress />}
+      />
       <Route path="/report/incident-report/:id" element={<ReportIncident />} />
-      <Route path="/report/individuals-report/:id" element={<ReportIndividuals />} />
-      <Route path="/report/overdose-safety-plan/:id" element={<ReportOverdoseSafetyPlan />} />
+      <Route
+        path="/report/individuals-report/:id"
+        element={<ReportIndividuals />}
+      />
+      <Route
+        path="/report/overdose-safety-plan/:id"
+        element={<ReportOverdoseSafetyPlan />}
+      />
       <Route path="/report/safety-plan/:id" element={<ReportSafetyPlan />} />
-      <Route path="/report/rent-supplement-request/:id" element={<ReportRentSupplement />} />
-      <Route path="/report/shelter-diversion-log/:id" element={<ReportShelterDiversion />} />
+      <Route
+        path="/report/rent-supplement-request/:id"
+        element={<ReportRentSupplement />}
+      />
+      <Route
+        path="/report/shelter-diversion-log/:id"
+        element={<ReportShelterDiversion />}
+      />
       <Route path="/report/site-list/:id" element={<ReportSiteList />} />
 
       <Route
@@ -65,7 +72,10 @@ const AppRoutes = () => (
         element={<ReportOverdoseSafetyPlan />}
       />
       <Route path="/report/incident-report" element={<ReportIncident />} />
-      <Route path="/report/individuals-report" element={<ReportIndividuals />} />
+      <Route
+        path="/report/individuals-report"
+        element={<ReportIndividuals />}
+      />
       <Route
         path="/report/shelter-diversion-log"
         element={<ReportShelterDiversion />}

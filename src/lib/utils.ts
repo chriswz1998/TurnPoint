@@ -1,6 +1,5 @@
 import { clsx, type ClassValue } from "clsx";
 import { twMerge } from "tailwind-merge";
-import { rentSupplementsProps } from "@/reports/rent-supplement-request/_components/columns.tsx";
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
@@ -18,14 +17,4 @@ export const formatDate = (isoString: Date): string => {
       hour12: false,
     })
     .replace(/\//g, "-");
-};
-
-export const searchByIndividual = (
-  data: rentSupplementsProps[],
-  keyword: string,
-) => {
-  const lowerKeyword = keyword.trim().toLowerCase();
-  return data.filter((item) =>
-    item.Individual.toLowerCase().includes(lowerKeyword),
-  );
 };
