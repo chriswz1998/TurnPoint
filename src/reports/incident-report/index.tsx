@@ -32,17 +32,11 @@ import { useParams } from "react-router-dom";
 import { CheckedState } from "@radix-ui/react-checkbox";
 import IncidentReportCharts from "@/reports/incident-report/_components/chart";
 
-const FormSchema = z.object({
-  individual: z.string(),
-  programOrSite: z.string(),
-  degreeOfInjury: z.string(),
-  typeOfInjury: z.string(),
-  typeOfSeriousIncident: z.string(),
-  dateAndTimeOfIncident: z.date(),
-});
+import { filterData } from "@/lib/filterIncidentReport";
 
 export default function IncidentReport() {
   const { id } = useParams();
+  const [dateAndTimeOfIncident, setDateAndTimeOfIncident] = useState<Date>();
   const [tableData, setTableData] = useState<incidentReportProps[] | null>();
   const [chartType, setChartType] = useState<boolean>(false);
   const [originalData, setOriginalData] = useState<
@@ -52,6 +46,26 @@ export default function IncidentReport() {
     useState<CheckedState>(false);
 
   const { fetchData, loading } = useHttp<any, incidentReportProps[]>();
+
+  const filter = () => {
+    const filteredData = filterData({
+      dateAndTimeOfIncident,
+      form,
+      originalData: originalData ?? [],
+    });
+
+    console.log("Filtered data: ", filteredData);
+    setTableData(filteredData);
+  };
+
+  const FormSchema = z.object({
+    individual: z.string(),
+    programOrSite: z.string(),
+    degreeOfInjury: z.string(),
+    typeOfInjury: z.string(),
+    typeOfSeriousIncident: z.string(),
+    dateAndTimeOfIncident: z.date().optional(),
+  });
 
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
@@ -65,56 +79,8 @@ export default function IncidentReport() {
     },
   });
 
-  const filter = () => {
-    const values = form.getValues();
-    let filtered = originalData ?? [];
-  
-    if (values.individual) {
-      filtered = filtered.filter((item: { individual: string }) =>
-        item.individual?.toLowerCase().includes(values.individual.toLowerCase())
-      );
-    }
-  
-    if (values.programOrSite) {
-      filtered = filtered.filter((item: { programOrSite: string }) =>
-        item.programOrSite?.toLowerCase().includes(values.programOrSite.toLowerCase())
-      );
-    }
-  
-    if (values.degreeOfInjury) {
-      filtered = filtered.filter((item: { degreeOfInjury: string }) =>
-        item.degreeOfInjury?.toLowerCase().includes(values.degreeOfInjury.toLowerCase())
-      );
-    }
-  
-    if (values.typeOfInjury) {
-      filtered = filtered.filter((item: { typeOfInjury: string }) =>
-        item.typeOfInjury?.toLowerCase().includes(values.typeOfInjury.toLowerCase())
-      );
-    }
-  
-    if (values.typeOfSeriousIncident) {
-      filtered = filtered.filter((item: { typeOfSeriousIncident: string }) =>
-        item.typeOfSeriousIncident?.toLowerCase().includes(values.typeOfSeriousIncident.toLowerCase())
-      );
-    }
-  
-    if (values.dateAndTimeOfIncident) {
-      const filterDate = new Date(values.dateAndTimeOfIncident);
-  
-      if (!isNaN(filterDate.getTime())) {
-        filtered = filtered.filter((item: { dateAndTimeOfIncident: Date }) => {
-          const incidentDate = new Date(item.dateAndTimeOfIncident);
-          return incidentDate >= filterDate;
-        });
-      }
-    }
-  
-    setTableData(filtered);
-  };
-  
-
   const clearFilter = async () => {
+    setDateAndTimeOfIncident(undefined);
     setTableData(originalData ?? []);
     setShowTotalResponse(false);
     form.reset({

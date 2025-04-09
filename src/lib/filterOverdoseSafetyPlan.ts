@@ -1,5 +1,5 @@
 import { UseFormReturn } from "react-hook-form";
-import { overdoseSafetyPlanProps } from "../reports/overdose-safety-plan/_components/columns"
+import { overdoseSafetyPlanProps } from "../reports/overdose-safety-plan/_components/columns";
 
 interface FilterParams {
   form: UseFormReturn<{
@@ -9,25 +9,19 @@ interface FilterParams {
   originalData: overdoseSafetyPlanProps[];
 }
 
-export function filterOverdoseSafetyPlanData({
+export function filterData({
   form,
-  originalData
+  originalData = []
 }: FilterParams): overdoseSafetyPlanProps[] {
   const { individual, programOrSite } = form.getValues();
   
-  let filteredData = [...(originalData || [])];
+  return (originalData || []).filter(item => {
+    const matchesIndividual = !individual || 
+      item.individual?.toLowerCase().includes(individual.toLowerCase());
+    
+    const matchesProgram = !programOrSite || 
+      item.programOrSite?.toLowerCase().includes(programOrSite.toLowerCase());
 
-  if (individual) {
-    filteredData = filteredData.filter(item =>
-      item.individual?.toLowerCase().includes(individual.toLowerCase())
-    );
-  }
-
-  if (programOrSite) {
-    filteredData = filteredData.filter(item =>
-      item.programOrSite?.toLowerCase().includes(programOrSite.toLowerCase())
-    );
-  }
-
-  return filteredData;
+    return matchesIndividual && matchesProgram;
+  });
 }

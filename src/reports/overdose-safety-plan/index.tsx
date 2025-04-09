@@ -23,13 +23,12 @@ import OverdoseSafetyPlanCharts from "@/reports/overdose-safety-plan/_components
 import useHttp from "@/lib/use-http.ts";
 import { CheckedState } from "@radix-ui/react-checkbox";
 
-const FormSchema = z.object({
-  individual: z.string().optional(),
-  programOrSite: z.string().optional(),
-});
+import { filterData } from "@/lib/filterOverdoseSafetyPlan";
 
 export default function OverdoseSafetyPlan() {
   const { id } = useParams();
+  const [individual, setIndividual] = useState<String>();
+  const [programOrSite, setProgramOrSite] = useState<String>();
   const [chartType, setChartType] = useState(false);
   const [tableData, setTableData] = useState<overdoseSafetyPlanProps[]>([]);
   const [originalData, setOriginalData] = useState<
@@ -40,6 +39,21 @@ export default function OverdoseSafetyPlan() {
 
   const { fetchData, loading } = useHttp<any, overdoseSafetyPlanProps[]>();
 
+  const filter = () => {
+    const filteredData = filterData({
+      form,
+      originalData: originalData ?? [],
+    });
+
+    console.log("Filtered data: ", filteredData);
+    setTableData(filteredData);
+  };
+
+  const FormSchema = z.object({
+    individual: z.string().optional(),
+    programOrSite: z.string().optional(),
+  });
+
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
     defaultValues: {
@@ -48,35 +62,16 @@ export default function OverdoseSafetyPlan() {
     },
   });
 
-  const filter = () => {
-    const values = form.getValues();
-    let filtered = originalData ?? [];
-
-    if (values.individual) {
-      filtered = filtered.filter((item: { individual: string; }) =>
-        item.individual.toLowerCase().includes(values.individual!.toLowerCase())
-      );
-    }
-
-    if (values.programOrSite) {
-      filtered = filtered.filter((item: { programOrSite: string; }) =>
-        item.programOrSite
-          .toLowerCase()
-          .includes(values.programOrSite!.toLowerCase())
-      );
-    }
-
-    setTableData(filtered);
-  };
-
   const clearFilter = async () => {
+    setIndividual(undefined);
+    setProgramOrSite(undefined);
     setTableData(originalData ?? []);
     setShowTotalResponse(false);
     form.reset({
       individual: "",
       programOrSite: "",
     });
-  };  
+  };
 
   const SwitchToChart = () => {
     setChartType(!chartType);
@@ -85,7 +80,7 @@ export default function OverdoseSafetyPlan() {
   const getData = async () => {
     const res = (await fetchData(
       `report/${id}`,
-      "GET",
+      "GET"
     )) as overdoseSafetyPlanProps[];
 
     console.log("Fetched Data: ", res);
@@ -102,7 +97,6 @@ export default function OverdoseSafetyPlan() {
   if (loading) {
     return <div>loading...</div>;
   }
-
 
   return (
     <div className="p-4 space-y-4">

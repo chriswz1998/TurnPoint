@@ -9,7 +9,7 @@ interface FilterParams {
     degreeOfInjury: string;
     typeOfInjury: string;
     typeOfSeriousIncident: string;
-    dateAndTimeOfIncident: Date; 
+    dateAndTimeOfIncident?: Date; 
   }>;
   originalData: incidentReportProps[];
 }
