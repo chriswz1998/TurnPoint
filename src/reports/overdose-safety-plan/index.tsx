@@ -9,6 +9,7 @@ import {
   FormControl,
   FormField,
   FormItem,
+  FormMessage,
 } from "@/components/ui/form.tsx";
 import { Input } from "@/components/ui/input.tsx";
 import { Button } from "@/components/ui/button.tsx";
@@ -22,37 +23,24 @@ import {
 import OverdoseSafetyPlanCharts from "@/reports/overdose-safety-plan/_components/chart";
 import useHttp from "@/lib/use-http.ts";
 import { CheckedState } from "@radix-ui/react-checkbox";
+import { filterData } from "@/reports/overdose-safety-plan/lib/filterOverdoseSafetyPlan.ts";
 
-import { filterData } from "@/lib/filterOverdoseSafetyPlan";
+const FormSchema = z.object({
+  individual: z.string().optional(),
+  programOrSite: z.string().optional(),
+});
 
 export default function OverdoseSafetyPlan() {
   const { id } = useParams();
-  const [individual, setIndividual] = useState<String>();
-  const [programOrSite, setProgramOrSite] = useState<String>();
   const [chartType, setChartType] = useState(false);
   const [tableData, setTableData] = useState<overdoseSafetyPlanProps[]>([]);
   const [originalData, setOriginalData] = useState<
     overdoseSafetyPlanProps[] | null
-  >();
+  >(null);
   const [showTotalResponse, setShowTotalResponse] =
     useState<CheckedState>(false);
 
   const { fetchData, loading } = useHttp<any, overdoseSafetyPlanProps[]>();
-
-  const filter = () => {
-    const filteredData = filterData({
-      form,
-      originalData: originalData ?? [],
-    });
-
-    console.log("Filtered data: ", filteredData);
-    setTableData(filteredData);
-  };
-
-  const FormSchema = z.object({
-    individual: z.string().optional(),
-    programOrSite: z.string().optional(),
-  });
 
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
@@ -62,15 +50,23 @@ export default function OverdoseSafetyPlan() {
     },
   });
 
-  const clearFilter = async () => {
-    setIndividual(undefined);
-    setProgramOrSite(undefined);
-    setTableData(originalData ?? []);
-    setShowTotalResponse(false);
+  const filter = () => {
+    const { individual, programOrSite } = form.getValues();
+    const filteredData = filterData({
+      data: originalData ?? [],
+      individual,
+      programOrSite,
+    });
+    setTableData(filteredData);
+  };
+
+  const clearFilter = () => {
     form.reset({
       individual: "",
       programOrSite: "",
     });
+    setShowTotalResponse(false);
+    setTableData(originalData ?? []);
   };
 
   const SwitchToChart = () => {
@@ -82,25 +78,21 @@ export default function OverdoseSafetyPlan() {
       `report/${id}`,
       "GET"
     )) as overdoseSafetyPlanProps[];
-
-    console.log("Fetched Data: ", res);
-    console.log("ID:", id);
-
-    setTableData(res);
     setOriginalData(res);
+    setTableData(res);
   };
 
   useEffect(() => {
     getData();
-  }, []);
+  }, [id]);
 
   if (loading) {
-    return <div>loading...</div>;
+    return <div>Loading...</div>;
   }
 
   return (
     <div className="p-4 space-y-4">
-      <div className="sticky top-0 left-0 bg-white z-50 flex flex-col justify-center space-y-4">
+      <div className="sticky top-0 left-0 bg-white z-50 shadow-md p-4 flex flex-col justify-center space-y-4">
         <h2 className="text-2xl font-semibold">Overdose Safety Plan Report</h2>
 
         <Form {...form}>
@@ -116,9 +108,11 @@ export default function OverdoseSafetyPlan() {
                   <FormControl>
                     <Input placeholder="Search by Individual" {...field} />
                   </FormControl>
+                  <FormMessage />
                 </FormItem>
               )}
             />
+
             <FormField
               control={form.control}
               name="programOrSite"
@@ -127,6 +121,7 @@ export default function OverdoseSafetyPlan() {
                   <FormControl>
                     <Input placeholder="Search by Program or Site" {...field} />
                   </FormControl>
+                  <FormMessage />
                 </FormItem>
               )}
             />
@@ -145,7 +140,7 @@ export default function OverdoseSafetyPlan() {
             <Button type="button" onClick={clearFilter} variant="outline">
               Clear Filter
             </Button>
-            <Button type="button" variant={"ghost"} onClick={SwitchToChart}>
+            <Button type="button" variant="ghost" onClick={SwitchToChart}>
               Switch to Chart
             </Button>
           </form>
@@ -153,14 +148,14 @@ export default function OverdoseSafetyPlan() {
       </div>
 
       {chartType ? (
-        <OverdoseSafetyPlanCharts data={tableData ?? []} />
+        <OverdoseSafetyPlanCharts data={tableData} />
       ) : (
-        <DataTable columns={columns} data={tableData ?? []} />
+        <DataTable columns={columns} data={tableData} />
       )}
 
       {showTotalResponse && (
         <div>
-          <p>Total responses: {tableData?.length}</p>
+          <p>Total responses: {tableData.length}</p>
         </div>
       )}
     </div>
