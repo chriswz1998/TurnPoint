@@ -7,7 +7,7 @@ export type overdoseSafetyPlanProps = {
   fileId: string;
   id: string;
   crisisContacts: string;
-  invidual: string;
+  individual: string;
   programOrSite: string;
   riskFactors: string;
   riskReductionActions: string;
