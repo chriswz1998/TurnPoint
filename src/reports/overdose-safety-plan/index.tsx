@@ -23,6 +23,7 @@ import {
 } from "@/components/ui/select.tsx";
 import { useEffect, useState } from "react";
 import useHttp from "@/lib/use-http.ts";
+import { useParams } from 'react-router-dom'
 
 const filters = [
   "Program/Site",
@@ -33,6 +34,7 @@ const FormSchema = z.object({
 });
 
 export default function OverdoseSafetyPlan() {
+  const {id} = useParams()
   const [selectedFilter, setSelectedFilter] = useState("");
 
   const { fetchData, data } = useHttp<any, overdoseSafetyPlanProps[]>();
@@ -49,7 +51,8 @@ export default function OverdoseSafetyPlan() {
   }
 
   const getTableData = async () => {
-    await fetchData("report/cm8oxyrzy0029r101mmwk52fw");
+    const a = await fetchData(`report/${id}`);
+    console.log(a);
   };
 
   useEffect(() => {
