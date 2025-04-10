@@ -4,9 +4,10 @@ import { ColumnDef } from "@tanstack/react-table";
 import { formatDate } from "@/lib/utils.ts";
 
 export type incidentReportProps = {
+  individual: any;
   fileId: string;
   id: string;
-  individual: string;
+  clientInvolved: string;
   programOrSite: string;
   dateAndTimeOfIncident: Date;
   degreeOfInjury: string;
@@ -16,8 +17,8 @@ export type incidentReportProps = {
 
 export const columns: ColumnDef<incidentReportProps>[] = [
   {
-    accessorKey: "individual",
-    header: "Individual",
+    accessorKey: "clientInvolved",
+    header: "Client Involved",
   },
   {
     accessorKey: "programOrSite",
