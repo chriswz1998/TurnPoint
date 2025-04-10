@@ -16,7 +16,7 @@ export type shelderDiversionFollowupProps = {
   followUpLog: string;
   initialFollowUpDate: Date;
   referralLog: string;
-  successfullDiversion: string;
+  successfulDiversion: string;
 };
 
 export const columns: ColumnDef<shelderDiversionFollowupProps>[] = [
@@ -62,7 +62,7 @@ export const columns: ColumnDef<shelderDiversionFollowupProps>[] = [
     header: "Referral Log",
   },
   {
-    accessorKey: "successfullDiversion",
+    accessorKey: "successfulDiversion",
     header: "Successfull Diversion",
   },
 ];

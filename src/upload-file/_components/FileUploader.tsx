@@ -27,7 +27,8 @@ const FileUploader = () => {
   const handleFileUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0]
     if (!file) return
-    setFile(file)
+    setFile(file);
+    console.log(JSON.stringify(file));
   }
 
   const handleFileTypeChange = async (value: string) => {

@@ -221,16 +221,12 @@ export default function ShelterDiversion() {
 
       {/* Visualization */}
       <div className="pt-4">
-        {showTotalResponse && (
-          <div className="mb-4 p-2 bg-gray-100 rounded-lg">
-            <p className="font-medium">Total records: {tableData?.length}</p>
-          </div>
-        )}
         {chartType ? (
           <ShelterDiversionChart data={tableData ?? []} />
         ) : (
           <DataTable columns={columns} data={tableData ?? []} />
         )}
+        <div>{showTotalResponse && <p>total is {tableData?.length}</p>}</div>
       </div>
     </div>
   );

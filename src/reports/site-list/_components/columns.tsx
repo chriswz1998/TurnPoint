@@ -5,42 +5,42 @@ import { ColumnDef } from "@tanstack/react-table";
 export type siteListProps = {
   fileId: string;
   id: string;
-  address: string;
-  city: string;
-  housingType: string;
-  managerOrSite: string;
-  managerPhoneNumber: number;
-  site: string;
-  sitePhoneNumber: number;
+  Address: string;
+  City: string;
+  HousingType: string;
+  ManagerOrSite: string;
+  ManagerPhoneNumber: number;
+  Site: string;
+  SitePhoneNumber: number;
 };
 
 export const columns: ColumnDef<siteListProps>[] = [
   {
-    accessorKey: "address",
+    accessorKey: "Address",
     header: "Address",
   },
   {
-    accessorKey: "city",
+    accessorKey: "City",
     header: "City",
   },
   {
-    accessorKey: "housingType",
+    accessorKey: "HousingType",
     header: "Housing Type",
   },
   {
-    accessorKey: "managerOrSite",
+    accessorKey: "ManagerOrSite",
     header: "Manager Or Site",
   },
   {
-    accessorKey: "managerPhoneNumber",
+    accessorKey: "ManagerPhoneNumber",
     header: "Manager's Phone Number",
   },
   {
-    accessorKey: "site",
+    accessorKey: "Site",
     header: "Site",
   },
   {
-    accessorKey: "sitePhoneNumber",
+    accessorKey: "SitePhoneNumber",
     header: "Site Phone Number",
   },
 ];

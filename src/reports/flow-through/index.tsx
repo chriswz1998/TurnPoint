@@ -40,7 +40,7 @@ export default function FlowThroughReport() {
       filterData(originalData ?? [], {
         from: startDate,
         to: endDate,
-      }),
+      })
     );
   };
 
@@ -58,7 +58,7 @@ export default function FlowThroughReport() {
   const getData = async () => {
     const res = (await fetchData(
       `report/${id}`,
-      "GET",
+      "GET"
     )) as flowThroughDataProps[];
     setTableData(res);
     setOriginalData(res);
@@ -84,7 +84,7 @@ export default function FlowThroughReport() {
                 variant={"outline"}
                 className={cn(
                   "w-[240px] justify-start text-left font-normal",
-                  !startDate && "text-muted-foreground",
+                  !startDate && "text-muted-foreground"
                 )}
               >
                 <CalendarIcon />
@@ -110,7 +110,7 @@ export default function FlowThroughReport() {
                 variant={"outline"}
                 className={cn(
                   "w-[240px] justify-start text-left font-normal",
-                  !endDate && "text-muted-foreground",
+                  !endDate && "text-muted-foreground"
                 )}
               >
                 <CalendarIcon />

@@ -31,7 +31,7 @@ export function filterData({
       (item.evictionPrevention || '').toLowerCase().includes(evictionPrevention.toLowerCase());
 
     const matchesDiversion = !successfullDiversion ||
-      (item.successfullDiversion || '').toLowerCase().includes(successfullDiversion.toLowerCase());
+      (item.successfulDiversion || '').toLowerCase().includes(successfullDiversion.toLowerCase());
 
     const matchesFollowUpDate = !initialFollowUpDate || 
       (item.initialFollowUpDate && 

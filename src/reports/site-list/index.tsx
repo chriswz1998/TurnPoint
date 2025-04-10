@@ -1,102 +1,104 @@
-import { Button } from "@/components/ui/button.tsx";
-import { zodResolver } from "@hookform/resolvers/zod";
+import { useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
-
-import {
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-} from "@/components/ui/form.tsx";
-// import { Input } from "@/components/ui/input.tsx";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { useParams } from "react-router-dom";
 import { DataTable } from "@/reports/site-list/_components/data-table";
 import {
   columns,
   siteListProps,
 } from "@/reports/site-list/_components/columns";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-} from "@/components/ui/select.tsx";
-import { useEffect, useState } from "react";
-import useHttp from "@/lib/use-http.ts";
+import useHttp from "@/lib/use-http";
+import { filterSiteListData } from "../../lib/filterSiteList";
+import { CheckedState } from "@radix-ui/react-checkbox";
+import { Checkbox } from "@/components/ui/checkbox.tsx";
 
-const filters = [
-  "Program/Site",
-];
+export default function SiteListReport() {
+  const { id } = useParams();
+  const [originalData, setOriginalData] = useState<siteListProps[] | null>();
+  const [tableData, setTableData] = useState<siteListProps[] | null>();
+  const [showTotalResponse, setShowTotalResponse] =
+    useState<CheckedState>(false);
 
-const FormSchema = z.object({
-  totalUnits: z.boolean().default(false),
-});
+  const { fetchData, loading } = useHttp<any, siteListProps[]>();
 
-export default function ShelterDiversion() {
-  const [selectedFilter, setSelectedFilter] = useState("");
+  const filter = () => {
+    const filteredData = filterSiteListData({
+      form,
+      originalData: originalData ?? [],
+    });
+    setTableData(filteredData);
+  };
 
-  const { fetchData, data } = useHttp<any, siteListProps[]>();
+  const clearFilter = () => {
+    form.reset({ site: "" });
+    setTableData(originalData ?? []);
+  };
+
+  const FormSchema = z.object({
+    site: z.string().optional(),
+  });
 
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
     defaultValues: {
-      totalUnits: true,
+      site: "",
     },
   });
 
-  function onSubmit(data: z.infer<typeof FormSchema>) {
-    console.log(data);
-  }
+  const getData = async () => {
+    const res = (await fetchData(`report/${id}`, "GET")) as siteListProps[];
 
-  const getTableData = async () => {
-    await fetchData("report/cm8oxyrzy0029r101mmwk52fw");
+    console.log("Fetched Data: ", res);
+    console.log("ID:", id);
+
+    setTableData(res);
+    setOriginalData(res);
   };
 
   useEffect(() => {
-    getTableData();
+    getData();
   }, []);
+
+  if (loading) {
+    return <div>loading...</div>;
+  }
 
   return (
     <div className="p-4 space-y-4">
-      <h2 className="text-2xl font-semibold">Site List Report</h2>
-      <div className="flex justify-between">
-        <Form {...form}>
-          <form
-            onSubmit={form.handleSubmit(onSubmit)}
-            className="flex items-center space-x-4"
-          >
-            <FormField
-              control={form.control}
-              name="totalUnits"
-              render={({ field }) => (
-                <FormItem>
-                  <FormControl>
-                    <FormItem>
-                      <FormControl>
-                        {/* <Input placeholder="search individual" {...field} /> */}
-                      </FormControl>
-                    </FormItem>
-                  </FormControl>
-                </FormItem>
-              )}
+      <div className="sticky top-0 left-0 bg-white z-50 flex flex-col space-y-4">
+        <h2 className="text-2xl font-semibold">Site List Report</h2>
+
+        <div className="flex flex-wrap gap-4 items-center">
+          <Input
+            placeholder="Filter by Site"
+            value={form.watch("site")}
+            onChange={(e) => form.setValue("site", e.target.value)}
+            className="w-[240px]"
+          />
+
+          {/* Show total count */}
+          <div className="flex items-center space-x-2">
+            <span>Total Responses</span>
+            <Checkbox
+              checked={showTotalResponse}
+              onCheckedChange={(checked) => setShowTotalResponse(checked)}
             />
-            {/* <Button type="submit">Search</Button> */}
-          </form>
-        </Form>
-        <Select onValueChange={setSelectedFilter}>
-          <SelectTrigger className="w-[260px]">
-            {selectedFilter || "Filter by"}
-          </SelectTrigger>
-          <SelectContent>
-            {filters.map((filter) => (
-              <SelectItem key={filter} value={filter}>
-                {filter}
-              </SelectItem>
-            ))}
-          </SelectContent>
-        </Select>
+          </div>
+
+          {/* Actions */}
+          <Button onClick={filter}>Apply Filter</Button>
+          <Button variant="outline" onClick={clearFilter}>
+            Clear Filter
+          </Button>
+        </div>
       </div>
-      <DataTable columns={columns} data={data || []} />
+
+      {/* Visualization */}
+      <DataTable columns={columns} data={tableData ?? []} />
+      <div>{showTotalResponse && <p>total is {tableData?.length}</p>}</div>
     </div>
   );
 }

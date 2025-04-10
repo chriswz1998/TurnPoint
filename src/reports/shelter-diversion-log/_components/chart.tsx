@@ -28,7 +28,7 @@ export default function ShelterDiversionChart({ data }: Props) {
         evictionMap[program] = (evictionMap[program] || 0) + 1;
       }
       
-      if (item.successfullDiversion) {
+      if (item.successfulDiversion) {
         diversionMap[program] = (diversionMap[program] || 0) + 1;
       }
       

@@ -6,8 +6,8 @@ import { formatDate } from "@/lib/utils.ts";
 export type individualsReportProp = {
   fileId: string;
   id: string;
-  clientPhoto: string;
-  individual: string;
+  ClientPhoto: string;
+  person: string;
   dateOfBirth: Date;
   site: string;
   programs: string;
@@ -16,11 +16,11 @@ export type individualsReportProp = {
 
 export const columns: ColumnDef<individualsReportProp>[] = [
   {
-    accessorKey: "clientPhoto",
+    accessorKey: "ClientPhoto",
     header: "Client Photo",
   },
   {
-    accessorKey: "individual",
+    accessorKey: "person",
     header: "Individual",
   },
   {
