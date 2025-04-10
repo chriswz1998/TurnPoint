@@ -6,53 +6,53 @@ import { formatDate } from "@/lib/utils.ts";
 export type overdoseSafetyPlanProps = {
   fileId: string;
   id: string;
-  crisisContacts: string;
-  individual: string;
-  programOrSite: string;
-  riskFactors: string;
-  riskReductionActions: string;
-  staffMember: string;
-  supportPeople: string;
-  todaysDate: Date;
-  wellnessHabits: string;
+  CrisisContacts: string;
+  Individual: string;
+  ProgramOrSite: string;
+  RiskFactors: string;
+  RiskReductionActions: string;
+  StaffMember: string;
+  SupportPeople: string;
+  TodaysDate: Date;
+  WellnessHabits: string;
 };
 
 export const columns: ColumnDef<overdoseSafetyPlanProps>[] = [
   {
-    accessorKey: "crisisContact",
+    accessorKey: "CrisisContacts",
     header: "Crisis Contact",
   },
   {
-    accessorKey: "individual",
+    accessorKey: "Individual",
     header: "Individual",
   },
   {
-    accessorKey: "programOrSite",
+    accessorKey: "ProgramOrSite",
     header: "Program or Site",
   },
   {
-    accessorKey: "riskFactors",
+    accessorKey: "RiskFactors",
     header: "Risk Factors",
   },
   {
-    accessorKey: "riskReuctionActions",
+    accessorKey: "RiskReductionActions",
     header: "Risk Reduction Actions",
   },
   {
-    accessorKey: "staffMember",
+    accessorKey: "StaffMember",
     header: "Staff Member",
   },
   {
-    accessorKey: "supportPeople",
+    accessorKey: "SupportPeople",
     header: "Support People",
   },
   {
-    accessorKey: "todaysDate",
+    accessorKey: "TodaysDate",
     header: "Today's Date",
-    cell: ({ row }) => formatDate(row.original.todaysDate),
+    cell: ({ row }) => formatDate(row.original.TodaysDate),
   },
   {
-    accessorKey: "wellnessHabits",
+    accessorKey: "WellnessHabits",
     header: "Wellness Habits",
   },
 ];

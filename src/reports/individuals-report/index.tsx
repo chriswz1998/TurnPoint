@@ -15,88 +15,128 @@ import {
   columns,
   individualsReportProp,
 } from "@/reports/individuals-report/_components/columns";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-} from "@/components/ui/select.tsx";
 import { useEffect, useState } from "react";
 import useHttp from "@/lib/use-http.ts";
-
-const filters = [
-  "Program/Site",
-];
+import { Checkbox } from "@/components/ui/checkbox.tsx";
+import { CheckedState } from "@radix-ui/react-checkbox";
+import { useParams } from "react-router-dom";
+import { filterData } from "../../lib/filterIndividuals";
 
 const FormSchema = z.object({
-  individual: z.string(),
+  individual: z.string().optional(),
+  program: z.string().optional(),
 });
 
 export default function IndividualsReport() {
-  const [selectedFilter, setSelectedFilter] = useState("");
+  const { id } = useParams();
+  const [originalData, setOriginalData] = useState<individualsReportProp[]>([]);
+  const [filteredData, setFilteredData] = useState<individualsReportProp[]>([]);
+  const [showTotalResponse, setShowTotalResponse] =
+    useState<CheckedState>(false);
+  const [tableData, setTableData] = useState<individualsReportProp[] | null>();
+  const { fetchData, loading } = useHttp<any, individualsReportProp[]>();
 
-  const { fetchData, data } = useHttp<any, individualsReportProp[]>();
+  // Función de filtrado
+  const filter = () => {
+    const filteredData = filterData({
+      form,
+      originalData: originalData ?? [],
+    });
+
+    console.log("Filtered data: ", filteredData);
+    setFilteredData(filteredData);
+  };
 
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
     defaultValues: {
-      individual: undefined,
+      individual: "",
+      program: "",
     },
   });
 
-  function onSubmit(data: z.infer<typeof FormSchema>) {
-    console.log(data);
-  }
+  const getData = async () => {
+    const res = (await fetchData(
+      `report/${id}`,
+      "GET"
+    )) as individualsReportProp[];
+    setOriginalData(res);
+    setFilteredData(res);
+  };
 
-  const getTableData = async () => {
-    await fetchData("report/cm8oxyrzy0029r101mmwk52fw");
+  const clearFilters = () => {
+    form.reset();
+    setFilteredData(originalData);
+    setShowTotalResponse(false);
   };
 
   useEffect(() => {
-    getTableData();
+    getData();
   }, []);
+
+  if (loading) return <div>Loading...</div>;
 
   return (
     <div className="p-4 space-y-4">
       <h2 className="text-2xl font-semibold">Individuals Report</h2>
-      <div className="flex justify-between">
-        <Form {...form}>
-          <form
-            onSubmit={form.handleSubmit(onSubmit)}
-            className="flex items-center space-x-4"
-          >
-            <FormField
-              control={form.control}
-              name="individual"
-              render={({ field }) => (
-                <FormItem>
-                  <FormControl>
-                    <FormItem>
-                      <FormControl>
-                        <Input placeholder="search individual" {...field} />
-                      </FormControl>
-                    </FormItem>
-                  </FormControl>
-                </FormItem>
-              )}
+
+      <Form {...form}>
+        <form
+          onSubmit={(e) => e.preventDefault()}
+          className="flex flex-wrap items-center gap-4"
+        >
+          <FormField
+            control={form.control}
+            name="individual"
+            render={({ field }) => (
+              <FormItem>
+                <FormControl>
+                  <Input
+                    placeholder="Search by Individual"
+                    {...field}
+                    className="w-[220px]"
+                  />
+                </FormControl>
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="program"
+            render={({ field }) => (
+              <FormItem>
+                <FormControl>
+                  <Input
+                    placeholder="Search by Program/Site"
+                    {...field}
+                    className="w-[260px]"
+                  />
+                </FormControl>
+              </FormItem>
+            )}
+          />
+          <div className="flex items-center space-x-2">
+            <span>Total Responses</span>
+            <Checkbox
+              checked={showTotalResponse}
+              onCheckedChange={(checked) => setShowTotalResponse(checked)}
             />
-            <Button type="submit">Search</Button>
-          </form>
-        </Form>
-        <Select onValueChange={setSelectedFilter}>
-          <SelectTrigger className="w-[260px]">
-            {selectedFilter || "Filter by"}
-          </SelectTrigger>
-          <SelectContent>
-            {filters.map((filter) => (
-              <SelectItem key={filter} value={filter}>
-                {filter}
-              </SelectItem>
-            ))}
-          </SelectContent>
-        </Select>
-      </div>
-      <DataTable columns={columns} data={data || []} />
+          </div>
+          <Button type="button" onClick={filter}>
+            Apply Filter
+          </Button>
+          <Button type="button" onClick={clearFilters} variant="outline">
+            Clear Filter
+          </Button>
+        </form>
+      </Form>
+      <DataTable columns={columns} data={filteredData} />
+
+      {showTotalResponse && (
+        <div className="text-sm text-muted-foreground">
+          Total: {filteredData.length}
+        </div>
+      )}
     </div>
   );
 }

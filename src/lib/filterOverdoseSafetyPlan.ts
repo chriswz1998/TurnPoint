@@ -11,16 +11,18 @@ interface FilterParams {
 
 export function filterData({
   form,
-  originalData = []
+  originalData = [],
 }: FilterParams): overdoseSafetyPlanProps[] {
   const { individual, programOrSite } = form.getValues();
-  
-  return (originalData || []).filter(item => {
-    const matchesIndividual = !individual || 
-      item.individual?.toLowerCase().includes(individual.toLowerCase());
-    
-    const matchesProgram = !programOrSite || 
-      item.programOrSite?.toLowerCase().includes(programOrSite.toLowerCase());
+
+  return (originalData || []).filter((item) => {
+    const matchesIndividual =
+      !individual ||
+      item.Individual?.toLowerCase().includes(individual.toLowerCase());
+
+    const matchesProgram =
+      !programOrSite ||
+      item.ProgramOrSite?.toLowerCase().includes(programOrSite.toLowerCase());
 
     return matchesIndividual && matchesProgram;
   });

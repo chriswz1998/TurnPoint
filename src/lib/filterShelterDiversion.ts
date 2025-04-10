@@ -5,7 +5,7 @@ interface FilterParams {
   form: UseFormReturn<{
     community?: string;
     evictionPrevention?: string;
-    successfullDiversion?: string; 
+    successfullDiversion?: string;
     initialFollowUpDate?: Date;
   }>;
   originalData: shelderDiversionFollowupProps[];
@@ -13,30 +13,43 @@ interface FilterParams {
 
 export function filterData({
   form,
-  originalData = []
+  originalData = [],
 }: FilterParams): shelderDiversionFollowupProps[] {
   const formValues = form.getValues();
-  const { 
-    community, 
-    evictionPrevention, 
+  const {
+    community,
+    evictionPrevention,
     successfullDiversion,
-    initialFollowUpDate 
+    initialFollowUpDate,
   } = formValues || {};
 
   return originalData.filter((item) => {
-    const matchesCommunity = !community || 
-      (item.community || '').toLowerCase().includes(community.toLowerCase());
+    const matchesCommunity =
+      !community ||
+      (item.community || "").toLowerCase().includes(community.toLowerCase());
 
-    const matchesEviction = !evictionPrevention ||
-      (item.evictionPrevention || '').toLowerCase().includes(evictionPrevention.toLowerCase());
+    const matchesEviction =
+      !evictionPrevention ||
+      (item.evictionPrevention || "")
+        .toLowerCase()
+        .includes(evictionPrevention.toLowerCase());
 
-    const matchesDiversion = !successfullDiversion ||
-      (item.successfullDiversion || '').toLowerCase().includes(successfullDiversion.toLowerCase());
+    const matchesDiversion =
+      !successfullDiversion ||
+      (item.successfulDiversion || "")
+        .toLowerCase()
+        .includes(successfullDiversion.toLowerCase());
 
-    const matchesFollowUpDate = !initialFollowUpDate || 
-      (item.initialFollowUpDate && 
-       new Date(item.initialFollowUpDate) >= new Date(initialFollowUpDate));
+    const matchesFollowUpDate =
+      !initialFollowUpDate ||
+      (item.initialFollowUpDate &&
+        new Date(item.initialFollowUpDate) >= new Date(initialFollowUpDate));
 
-    return matchesCommunity && matchesEviction && matchesDiversion && matchesFollowUpDate;
+    return (
+      matchesCommunity &&
+      matchesEviction &&
+      matchesDiversion &&
+      matchesFollowUpDate
+    );
   });
 }

@@ -23,15 +23,14 @@ export default function ShelterDiversionChart({ data }: Props) {
 
     data.forEach((item) => {
       const program = item.community || "Unknown";
-      
+
       if (item.evictionPrevention) {
         evictionMap[program] = (evictionMap[program] || 0) + 1;
       }
-      
-      if (item.successfullDiversion) {
+      if (item.successfulDiversion) {
         diversionMap[program] = (diversionMap[program] || 0) + 1;
       }
-      
+
       if (item.community) {
         communityMap[program] = (communityMap[program] || 0) + 1;
       }
@@ -53,7 +52,11 @@ export default function ShelterDiversionChart({ data }: Props) {
     };
   }, [data]);
 
-  const renderChart = (chartData: {program: string, count: number}[], title: string, color: string) => (
+  const renderChart = (
+    chartData: { program: string; count: number }[],
+    title: string,
+    color: string
+  ) => (
     <div className="space-y-6 mb-8">
       <h2 className="text-xl font-semibold mb-4 text-center">{title}</h2>
       <div className="bg-white rounded-2xl shadow p-4">
@@ -82,9 +85,21 @@ export default function ShelterDiversionChart({ data }: Props) {
 
   return (
     <div className="p-4 max-w-4xl mx-auto">
-      {renderChart(evictionData, "Eviction Prevention by Program/Site", "#f87171")}
-      {renderChart(diversionData, "Successful Diversion by Program/Site", "#60a5fa")}
-      {renderChart(communityData, "Community Engagement by Program/Site", "#34d399")}
+      {renderChart(
+        evictionData,
+        "Eviction Prevention by Program/Site",
+        "#f87171"
+      )}
+      {renderChart(
+        diversionData,
+        "Successful Diversion by Program/Site",
+        "#60a5fa"
+      )}
+      {renderChart(
+        communityData,
+        "Community Engagement by Program/Site",
+        "#34d399"
+      )}
     </div>
   );
 }
