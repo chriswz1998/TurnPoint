@@ -20,7 +20,7 @@ import useHttp from "@/lib/use-http.ts";
 import { Checkbox } from "@/components/ui/checkbox.tsx";
 import { CheckedState } from "@radix-ui/react-checkbox";
 import { useParams } from "react-router-dom";
-import { filterData } from "../../lib/filterIndividuals";
+import { filterData } from "@/lib/filterIndividuals.ts";
 
 const FormSchema = z.object({
   individual: z.string().optional(),
@@ -33,7 +33,6 @@ export default function IndividualsReport() {
   const [filteredData, setFilteredData] = useState<individualsReportProp[]>([]);
   const [showTotalResponse, setShowTotalResponse] =
     useState<CheckedState>(false);
-  const [tableData, setTableData] = useState<individualsReportProp[] | null>();
   const { fetchData, loading } = useHttp<any, individualsReportProp[]>();
 
   // Función de filtrado
@@ -58,7 +57,7 @@ export default function IndividualsReport() {
   const getData = async () => {
     const res = (await fetchData(
       `report/${id}`,
-      "GET"
+      "GET",
     )) as individualsReportProp[];
     setOriginalData(res);
     setFilteredData(res);

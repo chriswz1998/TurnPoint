@@ -5,46 +5,12 @@ import {
   columns,
   rentSupplementsProps,
 } from "@/reports/rent-supplement-request/_components/columns";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select.tsx";
 import { useEffect, useState } from "react";
 import useHttp from "@/lib/use-http.ts";
 import { useParams } from "react-router-dom";
-import {
-  filterData,
-  FilterType,
-} from "@/reports/rent-supplement-request/lib/filter.ts";
 import { searchByIndividual } from "@/reports/rent-supplement-request/lib/searchIndividual.ts";
-
-const filters = [
-  {
-    label: "Total responses by region/community",
-    value: "region",
-  },
-  {
-    label: "Total responses per category/option selected",
-    value: "category",
-  },
-  {
-    label:
-      "Total responses per category/PROGRAM selected filtered by region/community",
-    value: "category-program-region",
-  },
-  {
-    label: "Sum of total amount",
-    value: "sum",
-  },
-  {
-    label:
-      "Total sum filtered by Rent Supplement category/Program and by community",
-    value: "sum-filtered",
-  },
-];
+import { CheckedState } from "@radix-ui/react-checkbox";
+import { Checkbox } from "@/components/ui/checkbox.tsx";
 
 export default function RentSupplementReport() {
   const { id } = useParams();
@@ -52,6 +18,9 @@ export default function RentSupplementReport() {
   const [originalData, setOriginalData] = useState<
     rentSupplementsProps[] | null
   >();
+  const [showTotalResponse, setShowTotalResponse] =
+    useState<CheckedState>(false);
+
   const [tableData, setTableData] = useState<rentSupplementsProps[] | null>();
 
   const { fetchData, loading } = useHttp<any, rentSupplementsProps[]>();
@@ -59,11 +28,6 @@ export default function RentSupplementReport() {
   const search = () => {
     const result = searchByIndividual(originalData ?? [], searchValue ?? "");
     setTableData(result);
-  };
-
-  const filterTable = (value: FilterType) => {
-    const filtered = filterData(originalData ?? [], value);
-    setTableData(filtered);
   };
 
   const clearSearch = async () => {
@@ -102,27 +66,21 @@ export default function RentSupplementReport() {
             value={searchValue ?? ""}
             onChange={(e) => setSearchValue(e.target.value)}
           />
+          <div className="flex items-center space-x-2">
+            <span>Sum of total amount</span>
+            <Checkbox
+              checked={showTotalResponse}
+              onCheckedChange={setShowTotalResponse}
+            />
+          </div>
           <Button onClick={search}>Search</Button>
           <Button onClick={clearSearch} variant="outline">
             Clear Search
           </Button>
         </div>
-        <div>
-          <Select onValueChange={filterTable}>
-            <SelectTrigger className="w-[260px]">
-              <SelectValue placeholder="Select a filter" />
-            </SelectTrigger>
-            <SelectContent>
-              {filters.map((filter) => (
-                <SelectItem key={filter.value} value={filter.value}>
-                  {filter.label}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
-        </div>
       </div>
       <DataTable columns={columns} data={tableData ?? []} />
+      <div>{showTotalResponse && <p>total is {tableData?.length}</p>}</div>
     </div>
   );
 }

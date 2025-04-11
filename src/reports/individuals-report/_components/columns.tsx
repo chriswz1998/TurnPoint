@@ -2,6 +2,7 @@
 
 import { ColumnDef } from "@tanstack/react-table";
 import { formatDate } from "@/lib/utils.ts";
+import { Avatar, AvatarFallback, AvatarImage } from "@radix-ui/react-avatar";
 
 export type individualsReportProp = {
   fileId: string;
@@ -18,6 +19,12 @@ export const columns: ColumnDef<individualsReportProp>[] = [
   {
     accessorKey: "ClientPhoto",
     header: "Client Photo",
+    cell: ({ row }) => (
+      <Avatar>
+        <AvatarImage src={row.original.ClientPhoto} alt="@shadcn" />
+        <AvatarFallback>No Photo</AvatarFallback>
+      </Avatar>
+    ),
   },
   {
     accessorKey: "person",

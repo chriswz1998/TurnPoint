@@ -5,47 +5,34 @@ import {
   columns,
   safetyPlanProps,
 } from "@/reports/safety-plan/_components/columns";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select.tsx";
 import { useEffect, useState } from "react";
 import useHttp from "@/lib/use-http.ts";
 import { useParams } from "react-router-dom";
-import { searchByIndividual } from "@/reports/safety-plan/lib/searchIndividual.ts";
-import { filterData, FilterType } from "@/reports/safety-plan/lib/filter.ts";
-
-const filters = [
-  {
-    value: "Program/Site",
-    label: "Program/Site",
-  },
-];
+import { searchSafetyPlans } from "@/reports/safety-plan/lib/searchSafetyPlans.ts";
 
 export default function SafetyPlan() {
   const { id } = useParams();
   const [searchValue, setSearchValue] = useState<string | undefined>();
+  const [searchProgramOrSite, setSearchProgramOrSite] = useState<
+    string | undefined
+  >();
   const [originalData, setOriginalData] = useState<safetyPlanProps[] | null>();
   const [tableData, setTableData] = useState<safetyPlanProps[] | null>();
 
   const { fetchData, loading } = useHttp<any, safetyPlanProps[]>();
 
   const search = () => {
-    const result = searchByIndividual(originalData ?? [], searchValue ?? "");
+    const result = searchSafetyPlans(originalData ?? [], {
+      individual: searchValue,
+      programOrSite: searchProgramOrSite,
+    });
     setTableData(result);
-  };
-
-  const filterTable = (value: FilterType) => {
-    const filtered = filterData(originalData ?? [], value);
-    setTableData(filtered);
   };
 
   const clearSearch = async () => {
     setTableData(originalData);
     setSearchValue(undefined);
+    setSearchProgramOrSite(undefined);
   };
 
   const getData = async () => {
@@ -74,24 +61,16 @@ export default function SafetyPlan() {
             value={searchValue ?? ""}
             onChange={(e) => setSearchValue(e.target.value)}
           />
+          <Input
+            className={"w-72"}
+            placeholder="search program / site"
+            value={searchProgramOrSite ?? ""}
+            onChange={(e) => setSearchProgramOrSite(e.target.value)}
+          />
           <Button onClick={search}>Search</Button>
           <Button onClick={clearSearch} variant="outline">
             Clear Search
           </Button>
-        </div>
-        <div>
-          <Select onValueChange={filterTable}>
-            <SelectTrigger className="w-[260px]">
-              <SelectValue placeholder="Select a filter" />
-            </SelectTrigger>
-            <SelectContent>
-              {filters.map((filter) => (
-                <SelectItem key={filter.value} value={filter.value}>
-                  {filter.label}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
         </div>
       </div>
       <DataTable columns={columns} data={tableData || []} />

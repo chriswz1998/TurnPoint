@@ -11,13 +11,6 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover.tsx";
-
-import {
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-} from "@/components/ui/form.tsx";
 import { Input } from "@/components/ui/input.tsx";
 import { DataTable } from "@/reports/shelter-diversion-log/_components/data-table";
 import {
@@ -41,7 +34,6 @@ import ShelterDiversionChart from "./_components/chart";
 
 export default function ShelterDiversion() {
   const { id } = useParams();
-  const [selectedFilter, setSelectedFilter] = useState("");
   const [chartType, setChartType] = useState<boolean>(false);
   const [initialFollowUpDate, setInitialFollowUpDate] = useState<Date>();
   const [originalData, setOriginalData] = useState<
@@ -104,7 +96,7 @@ export default function ShelterDiversion() {
   const getData = async () => {
     const res = (await fetchData(
       `report/${id}`,
-      "GET"
+      "GET",
     )) as shelderDiversionFollowupProps[];
 
     console.log("Fetched Data: ", res);
@@ -137,7 +129,7 @@ export default function ShelterDiversion() {
                 variant={"outline"}
                 className={cn(
                   "w-[240px] justify-start text-left font-normal",
-                  !initialFollowUpDate && "text-muted-foreground"
+                  !initialFollowUpDate && "text-muted-foreground",
                 )}
               >
                 <CalendarIcon />

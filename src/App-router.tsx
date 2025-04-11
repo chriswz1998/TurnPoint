@@ -3,7 +3,6 @@ import { Login } from "@/auth/login.tsx";
 import Layout from "@/layout/layout.tsx";
 import UploadFile from "@/upload-file";
 import Dashboard from "@/dashboard";
-import TestPage from "@/test";
 import AccountCreation from "@/createAccount/userCreation";
 
 import Reports from "@/reports";
@@ -29,7 +28,6 @@ const AppRoutes = () => (
       <Route path="/Search" element={<UploadFile />} />
       <Route path="/Report" element={<Reports />} />
       <Route path="/CreateAccount" element={<AccountCreation />} />
-      <Route path="/TestPage" element={<TestPage />} />
 
       <Route path="/report/intake-reporting" element={<ReportIntake />} />
       <Route path="/report/flow-through/:id" element={<ReportFlowThrough />} />

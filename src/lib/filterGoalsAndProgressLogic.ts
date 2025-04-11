@@ -1,5 +1,5 @@
 // filterData.ts
-import { useForm, UseFormReturn } from "react-hook-form";
+import { UseFormReturn } from "react-hook-form";
 import { goalsProgressProps } from "@/reports/goals-and-progress/_components/columns.tsx";
 
 interface FilterParams {
@@ -48,7 +48,7 @@ export function filterData({
     filteredData = filteredData.filter((data) =>
       data.individual
         .toLowerCase()
-        .includes(form.getValues().individual.toLowerCase())
+        .includes(form.getValues().individual.toLowerCase()),
     );
   }
 
@@ -56,11 +56,11 @@ export function filterData({
     filteredData = filteredData.filter((data) =>
       data.programResidence
         .toLowerCase()
-        .includes(form.getValues().programSite.toLowerCase())
+        .includes(form.getValues().programSite.toLowerCase()),
     );
   }
 
-  const goalTypeValue = form.getValues().goalType?.trim(); 
+  const goalTypeValue = form.getValues().goalType?.trim();
 
   if (goalTypeValue) {
     filteredData = filteredData.filter((data) => {

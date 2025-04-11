@@ -1,0 +1,41 @@
+name: Build and Release Windows EXE
+
+on:
+  push:
+    tags:
+      - "v*.*.*" # 只在推送 v1.0.0 这样的 tag 时触发
+
+jobs:
+  build:
+    runs-on: windows-latest
+
+    steps:
+      - name: 🧾 Checkout code
+        uses: actions/checkout@v3
+
+      - name: ⚙️ Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: "18"
+
+      - name: ⚙️ Setup Rust
+        uses: actions-rs/toolchain@v1
+        with:
+          toolchain: stable
+          target: x86_64-pc-windows-msvc
+          override: true
+
+      - name: 📦 Install dependencies
+        run: |
+          npm install
+          npm install -g @tauri-apps/cli
+
+      - name: 🏗️ Build Tauri app
+        run: npm run tauri build
+
+      - name: 🚀 Upload .exe to GitHub Releases
+        uses: softprops/action-gh-release@v1
+        with:
+          files: ./src-tauri/target/release/bundle/nsis/*.exe
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

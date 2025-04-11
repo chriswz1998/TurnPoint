@@ -105,7 +105,7 @@ export default function GoalsProgressReport() {
       individual: "",
       programSite: "",
       goalType: "",
-    })
+    });
   };
 
   const SwitchToChart = () => {
@@ -115,7 +115,7 @@ export default function GoalsProgressReport() {
   const getData = async () => {
     const res = (await fetchData(
       `report/${id}`,
-      "GET"
+      "GET",
     )) as goalsProgressProps[];
 
     console.log("Fetched Data: ", res);
@@ -202,7 +202,7 @@ export default function GoalsProgressReport() {
                   variant={"outline"}
                   className={cn(
                     "w-[240px] justify-start text-left font-normal",
-                    !startDate && "text-muted-foreground"
+                    !startDate && "text-muted-foreground",
                   )}
                 >
                   <CalendarIcon />
@@ -228,7 +228,7 @@ export default function GoalsProgressReport() {
                   variant={"outline"}
                   className={cn(
                     "w-[240px] justify-start text-left font-normal",
-                    !completionDate && "text-muted-foreground"
+                    !completionDate && "text-muted-foreground",
                   )}
                 >
                   <CalendarIcon />
@@ -254,7 +254,7 @@ export default function GoalsProgressReport() {
                   variant={"outline"}
                   className={cn(
                     "w-[240px] justify-start text-left font-normal",
-                    !discontinuedDate && "text-muted-foreground"
+                    !discontinuedDate && "text-muted-foreground",
                   )}
                 >
                   <CalendarIcon />

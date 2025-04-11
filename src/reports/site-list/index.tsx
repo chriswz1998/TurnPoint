@@ -11,7 +11,7 @@ import {
   siteListProps,
 } from "@/reports/site-list/_components/columns";
 import useHttp from "@/lib/use-http";
-import { filterSiteListData } from "../../lib/filterSiteList";
+import { filterSiteListData } from "@/lib/filterSiteList.ts";
 import { CheckedState } from "@radix-ui/react-checkbox";
 import { Checkbox } from "@/components/ui/checkbox.tsx";
 

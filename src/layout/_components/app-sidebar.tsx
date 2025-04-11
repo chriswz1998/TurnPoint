@@ -1,15 +1,13 @@
-import * as React from 'react'
+import * as React from "react";
 import {
   ChartLine,
   FolderUp,
   GalleryVerticalEnd,
   Home,
-  // SearchIcon,
-  Settings,
-  UserRoundPlus
-} from 'lucide-react'
+  UserRoundPlus,
+} from "lucide-react";
 
-import { NavUser } from './nav-user'
+import { NavUser } from "./nav-user";
 import {
   Sidebar,
   SidebarContent,
@@ -21,21 +19,21 @@ import {
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
-  SidebarRail
-} from '@/components/ui/sidebar'
-import { useAuth } from '@/context/AuthContext.tsx'
-import { Link } from 'react-router-dom'
+  SidebarRail,
+} from "@/components/ui/sidebar";
+import { useAuth } from "@/context/AuthContext.tsx";
+import { Link } from "react-router-dom";
 
 const items = [
   {
-    title: 'Dashboard',
-    url: '/',
-    icon: Home
+    title: "Dashboard",
+    url: "/",
+    icon: Home,
   },
   {
-    title: 'Upload File',
-    url: '/UploadFile',
-    icon: FolderUp
+    title: "Upload File",
+    url: "/UploadFile",
+    icon: FolderUp,
   },
   // {
   //   title: 'Search',
@@ -43,24 +41,19 @@ const items = [
   //   icon: SearchIcon
   // },
   {
-    title: 'Report',
-    url: '/Report',
-    icon: ChartLine
+    title: "Report",
+    url: "/Report",
+    icon: ChartLine,
   },
   {
-    title: 'Create Account',
-    url: '/CreateAccount',
-    icon: UserRoundPlus
+    title: "Create Account",
+    url: "/CreateAccount",
+    icon: UserRoundPlus,
   },
-  {
-    title: 'TestPage',
-    url: '/TestPage',
-    icon: Settings
-  }
-]
+];
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
-  const { user } = useAuth()
+  const { user } = useAuth();
   return (
     <Sidebar collapsible="icon" {...props}>
       <SidebarHeader>
@@ -98,5 +91,5 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
       </SidebarFooter>
       <SidebarRail />
     </Sidebar>
-  )
+  );
 }

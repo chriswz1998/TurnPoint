@@ -1,5 +1,5 @@
 // filterData.ts
-import { useForm, UseFormReturn } from "react-hook-form";
+import { UseFormReturn } from "react-hook-form";
 import { individualsReportProp } from "@/reports/individuals-report/_components/columns.tsx";
 
 interface FilterParams {
@@ -20,7 +20,7 @@ export function filterData({
 
   if (individual) {
     filteredData = filteredData.filter((data) =>
-      data.person.toLowerCase().includes(individual.toLowerCase())
+      data.person.toLowerCase().includes(individual.toLowerCase()),
     );
   }
 

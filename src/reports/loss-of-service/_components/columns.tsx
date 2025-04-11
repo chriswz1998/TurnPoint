@@ -1,59 +1,64 @@
 "use client";
 
 import { ColumnDef } from "@tanstack/react-table";
+import { formatDate } from "@/lib/utils.ts";
 
 export type losOfServiceProps = {
-  endDateTime: string;
-  individual: string;
-  managerApproved: string;
-  programOrSite: string;
-  rationaleLOS: string;
-  reasonRestriction: string;
-  reviewTPCSLOS: string;
-  staffReporting: string;
-  startDateTime: string;
-  relatedToIncident: string;
+  EndDateTimeOfLOS: string;
+  Individual: string;
+  ManagerApproved: string;
+  ProgramOrSite: string;
+  RationaleForLOSMore48Hours: string;
+  ReasonAndRationaleForRestriction: string;
+  ReviewForTPCSLOS: string;
+  StaffReporting: string;
+  StartDateTimeOfLOS: string;
+  WasThisRelatedToACriticalIncident: string;
+  fileId: string;
+  id: string;
 };
 
 export const columns: ColumnDef<losOfServiceProps>[] = [
   {
-    accessorKey: "individual",
+    accessorKey: "Individual",
     header: "Individual",
   },
   {
-    accessorKey: "endDateTime",
+    accessorKey: "EndDateTimeOfLOS",
     header: "End Date",
+    cell: ({ row }) => formatDate(new Date(row.original.EndDateTimeOfLOS)),
   },
   {
-    accessorKey: "managerApproved",
+    accessorKey: "ManagerApproved",
     header: "Manager Approved",
   },
   {
-    accessorKey: "programOrSite",
+    accessorKey: "ProgramOrSite",
     header: "Program or Site",
   },
   {
-    accessorKey: "rationaleLOS",
+    accessorKey: "RationaleForLOSMore48Hours",
     header: "Rationale LOS",
   },
   {
-    accessorKey: "reasonRestriction",
+    accessorKey: "ReasonAndRationaleForRestriction",
     header: "Reason Restriction",
   },
   {
-    accessorKey: "reviewTPCSLOS",
+    accessorKey: "ReviewForTPCSLOS",
     header: "Review TPCSLOS",
   },
   {
-    accessorKey: "staffReporting",
+    accessorKey: "StaffReporting",
     header: "Staff Reporting",
   },
   {
-    accessorKey: "startDateTime",
+    accessorKey: "StartDateTimeOfLOS",
     header: "Start Date",
+    cell: ({ row }) => formatDate(new Date(row.original.StartDateTimeOfLOS)),
   },
   {
-    accessorKey: "relatedToIncident",
+    accessorKey: "WasThisRelatedToACriticalIncident",
     header: "Related to Incident",
   },
 ];

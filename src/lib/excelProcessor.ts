@@ -39,48 +39,54 @@ const parseType1 = (jsonData: any): Type1Report[] => {
   };
 
   let section = "";
-  let selfIdentifiersReport: any[] = [];
-
   jsonData.forEach((row: string[]) => {
-
     if (row[0] === "By Immediate Needs Upon Intake") {
       section = "ImmediateNeeds";
     } else if (row[0] === "By Previous Living Situation") {
       section = "PreviousLivingSituation";
     } else if (row[0] === "By Citizen/Immigration Status") {
       section = "CitizenImmigrationStatus";
-    } else if (row[0] === "By Veteran Status") {  
+    } else if (row[0] === "By Veteran Status") {
       section = "VeteranStatus";
     } else if (row[0] === "By Income Types") {
-      section = "IncomeType"
-
+      section = "IncomeType";
     } else if (section === "ImmediateNeeds" && row[0] && row[1] && row[2]) {
       currentReport.IntakeAssessmentByImmediateNeedsUponIntake.push({
         "Immediate Need": row[0],
         Count: Number(row[1]),
         "Percentage(%)": row[2],
       });
-    } else if (section === "PreviousLivingSituation" && row[0] && row[1] && row[2]) {
+    } else if (
+      section === "PreviousLivingSituation" &&
+      row[0] &&
+      row[1] &&
+      row[2]
+    ) {
       currentReport.IntakeAssessmentByPreviousLivingSituation.push({
         "Previous Living Situation": row[0],
         Count: Number(row[1]),
         "Percentage(%)": row[2],
       });
-    } else if (section === "CitizenImmigrationStatus" && row[0] && row[1] && row[2]) {
+    } else if (
+      section === "CitizenImmigrationStatus" &&
+      row[0] &&
+      row[1] &&
+      row[2]
+    ) {
       currentReport.SelfIdentifiersByCitizenImmigrationSatus.push({
-        "Status": row[0],
+        Status: row[0],
         Count: Number(row[1]),
         "Percentage(%)": row[2],
       });
     } else if (section === "VeteranStatus" && row[0] && row[1] && row[2]) {
       currentReport.SelfIdentifiersByVeteranStatus.push({
-        "Status": row[0],
+        Status: row[0],
         Count: Number(row[1]),
         "Percentage(%)": row[2],
       });
     } else if (section === "IncomeType" && row[0] && row[1] && row[2]) {
       currentReport.IncomeEmploymentByIncomeType.push({
-        "Type": row[0],
+        Type: row[0],
         Count: Number(row[1]),
         "Percentage(%)": row[2],
       });
@@ -104,16 +110,12 @@ const parseType1 = (jsonData: any): Type1Report[] => {
         SelfIdentifiersByVeteranStatus: [],
         IncomeEmploymentByIncomeType: [],
       };
-      selfIdentifiersReport = [];
       section = "";
     }
   });
 
   return type1Report;
 };
-
-
-
 
 // ========== 各类型处理函数 ==========
 export const parseType2 = (rows: any[][]): Type2Individual[] => {
@@ -177,7 +179,7 @@ export const parseType5 = (rows: any[][]): Type5Individual[] => {
     if (
       !Array.isArray(row) ||
       row.every((cell) =>
-        typeof cell === "string" ? cell.trim() === "" : !cell
+        typeof cell === "string" ? cell.trim() === "" : !cell,
       )
     )
       return;
@@ -319,7 +321,7 @@ const readFileAsArrayBuffer = (file: File): Promise<ArrayBuffer> => {
 // ========== 主入口函数 ==========
 export const processExcelFile = async (
   file: File,
-  fileType: string
+  fileType: string,
 ): Promise<ParsedData> => {
   const buffer = await readFileAsArrayBuffer(file);
   const workbook = XLSX.read(new Uint8Array(buffer), { type: "array" });
@@ -350,8 +352,8 @@ export const processExcelFile = async (
     metadata.records = parseType10(jsonData);
   if (fileType === "Site List") metadata.records = parseType11(jsonData);
 
-  if (fileType === 'Intake Reporting') {
-    console.log('jsonData:', jsonData);
+  if (fileType === "Intake Reporting") {
+    console.log("jsonData:", jsonData);
     metadata.records = parseType1(jsonData);
   }
 

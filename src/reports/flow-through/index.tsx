@@ -17,9 +17,9 @@ import {
 import { useParams } from "react-router-dom";
 import useHttp from "@/lib/use-http.ts";
 import { useEffect, useState } from "react";
-import { filterData } from "@/lib/filterByDateRange.ts";
 import { CheckedState } from "@radix-ui/react-checkbox";
 import FlowThroughCharts from "@/reports/flow-through/_components/chart.tsx";
+import { filterData } from "@/reports/flow-through/lib/filterByDateRange.ts";
 
 export default function FlowThroughReport() {
   const { id } = useParams();
