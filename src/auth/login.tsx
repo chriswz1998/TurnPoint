@@ -19,6 +19,7 @@ import useFetch from "@/lib/use-http.ts";
 import toast from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
 import { useAuth, UserProps } from "@/context/AuthContext.tsx";
+import logo from "../assets/logo.svg";
 
 interface ResponesProps extends UserProps {
   access_token: string;
@@ -64,13 +65,7 @@ export const Login = () => {
     <div className="flex w-full h-full sm:bg-custom-bg md:bg-custom-bg lg:bg-none">
       <div className="min-h-screen w-1/2 bg-white px-6 mx-auto flex flex-col items-center">
         {/* 图片紧贴顶部 */}
-        <img
-          src="../../src/assets/logo.svg"
-          alt="Logo"
-          className="self-center"
-        />
-        {/*eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJjbThtbDUzc3AwMDAwcjVxb2tjczVjamw0IiwiZW1haWwiOiJ0ZXN0QGV4YW1wbGUuY29tIiwicm9sZSI6IlVTRVIiLCJpYXQiOjE3NDI3OTE4NDUsImV4cCI6MTc0MjgyNzg0NX0.dmZQ8rYKNO11mV1zbbaRwbHS86lswVYRFZJGRK_P8Rw*/}
-
+        <img src={logo} alt="Logo" className="self-center" />
         {/* 表单上下左右居中 */}
         <div className="flex-1 w-full flex items-center justify-center">
           <Form {...form}>
