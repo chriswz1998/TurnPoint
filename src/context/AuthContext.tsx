@@ -1,5 +1,6 @@
 import React, { createContext, useState, ReactNode, useEffect } from "react";
 import useHttp from "@/lib/use-http.ts";
+import { useNavigate } from "react-router-dom";
 
 enum Role {
   ADMIN = "ADMIN",
@@ -27,6 +28,8 @@ const AuthContext = createContext<AuthContextType | undefined>(undefined);
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [user, setUser] = useState<UserProps | null>(null);
   const [loading, setLoading] = useState(false);
+
+  const navigate = useNavigate();
   const { fetchData } = useHttp();
   useEffect(() => {
     reLogin();
@@ -45,6 +48,8 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         localStorage.removeItem("access_token");
         setUser(null);
       }
+    } else {
+      navigate("/login");
     }
     setLoading(false); // ✅ 最后设置为 false
   };
