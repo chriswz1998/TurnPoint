@@ -19,7 +19,7 @@ import useHttp from "@/lib/use-http.ts";
 import { useEffect, useState } from "react";
 import { filterData } from "@/lib/filterByDateRange.ts";
 import { CheckedState } from "@radix-ui/react-checkbox";
-import FlowThroughCharts from "@/reports/flow-through/_components/chart";
+import FlowThroughCharts from "@/reports/flow-through/_components/chart.tsx";
 
 export default function FlowThroughReport() {
   const { id } = useParams();

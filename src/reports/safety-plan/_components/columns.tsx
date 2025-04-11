@@ -5,7 +5,7 @@ import { ColumnDef } from "@tanstack/react-table";
 export type safetyPlanProps = {
   fileId: string;
   id: string;
-  invidual: string;
+  individual: string;
   programOrSite: string;
   selfSoothingStrategies: string;
   reasonsForLiving: string;

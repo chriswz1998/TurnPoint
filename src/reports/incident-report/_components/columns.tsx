@@ -4,6 +4,7 @@ import { ColumnDef } from "@tanstack/react-table";
 import { formatDate } from "@/lib/utils.ts";
 
 export type incidentReportProps = {
+  individual: any;
   fileId: string;
   id: string;
   clientInvolved: string;

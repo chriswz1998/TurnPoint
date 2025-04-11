@@ -2,61 +2,61 @@
 // Username: test@example.com
 // Password: 1122
 
-import { zodResolver } from '@hookform/resolvers/zod'
-import { useForm } from 'react-hook-form'
-import { z } from 'zod'
-import { Button } from '@/components/ui/button'
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useForm } from "react-hook-form";
+import { z } from "zod";
+import { Button } from "@/components/ui/button";
 import {
   Form,
   FormControl,
   FormField,
   FormItem,
   FormLabel,
-  FormMessage
-} from '@/components/ui/form'
-import { Input } from '@/components/ui/input'
-import useFetch from '@/lib/use-http.ts'
-import toast from 'react-hot-toast'
-import { useNavigate } from 'react-router-dom'
-import { useAuth, UserProps } from '@/context/AuthContext.tsx'
+  FormMessage,
+} from "@/components/ui/form";
+import { Input } from "@/components/ui/input";
+import useFetch from "@/lib/use-http.ts";
+import toast from "react-hot-toast";
+import { useNavigate } from "react-router-dom";
+import { useAuth, UserProps } from "@/context/AuthContext.tsx";
 
 interface ResponesProps extends UserProps {
-  access_token: string
+  access_token: string;
 }
 
 const FormSchema = z.object({
   email: z.string().min(2, {
-    message: 'email is required.'
+    message: "email is required.",
   }),
   password: z.string().min(4, {
-    message: 'password is required.'
-  })
-})
+    message: "password is required.",
+  }),
+});
 
 export const Login = () => {
-  const { setUser } = useAuth()
-  const { loading, fetchData } = useFetch()
-  const navigate = useNavigate()
+  const { setUser } = useAuth();
+  const { loading, fetchData } = useFetch();
+  const navigate = useNavigate();
 
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
     defaultValues: {
-      email: 'test@example.com',
-      password: '1122'
-    }
-  })
+      email: "test@example.com",
+      password: "1122",
+    },
+  });
 
   async function onSubmit(data: z.infer<typeof FormSchema>) {
     const res = await fetchData<z.infer<typeof FormSchema>, ResponesProps>(
-      'auth/login',
-      'POST',
-      data
-    )
+      "auth/login",
+      "POST",
+      data,
+    );
     if (res && res.access_token) {
-      localStorage.setItem('access_token', res?.access_token) // 存储 access_token
-      setUser(res)
-      toast.success('Login successfully!')
-      navigate('/dashboard')
+      localStorage.setItem("access_token", res?.access_token); // 存储 access_token
+      setUser(res);
+      toast.success("Login successfully!");
+      navigate("/dashboard");
     }
   }
 
@@ -117,5 +117,5 @@ export const Login = () => {
       </div>
       <div className="w-full h-full flex flex-col items-center justify-center sm:hidden md:hidden lg:block bg-custom-bg bg-cover bg-center" />
     </div>
-  )
-}
+  );
+};

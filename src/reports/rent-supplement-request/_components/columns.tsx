@@ -5,18 +5,18 @@ import { ColumnDef } from "@tanstack/react-table";
 export type rentSupplementsProps = {
   fileId: string;
   id: string;
-  individual: string;
-  notes: string;
+  Individual: string;
+  Notes: string;
   programOrSite: string;
 };
 
 export const columns: ColumnDef<rentSupplementsProps>[] = [
   {
-    accessorKey: "individual",
+    accessorKey: "Individual",
     header: "Individual",
   },
   {
-    accessorKey: "notes",
+    accessorKey: "Notes",
     header: "Notes",
   },
   {

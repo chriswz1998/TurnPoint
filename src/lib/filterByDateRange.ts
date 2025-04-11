@@ -7,7 +7,7 @@ interface DateRange {
 
 export function filterData(
   data: flowThroughDataProps[],
-  dateRange: DateRange,
+  dateRange: DateRange
 ): flowThroughDataProps[] | undefined {
   const { from, to } = dateRange;
 

@@ -18,7 +18,7 @@ import {
 import { useEffect, useState } from "react";
 import useHttp from "@/lib/use-http.ts";
 import { Checkbox } from "@/components/ui/checkbox.tsx";
-import IndividualsChart from "@/reports/individuals-report/_components/chart";
+
 import { CheckedState } from "@radix-ui/react-checkbox";
 import { useParams } from "react-router-dom";
 import { filterData } from "../../lib/filterIndividuals";
@@ -32,8 +32,9 @@ export default function IndividualsReport() {
   const { id } = useParams();
   const [originalData, setOriginalData] = useState<individualsReportProp[]>([]);
   const [filteredData, setFilteredData] = useState<individualsReportProp[]>([]);
-  const [chartType, setChartType] = useState<boolean>(false);
-  const [showTotalResponse, setShowTotalResponse] = useState<CheckedState>(false);
+
+  const [showTotalResponse, setShowTotalResponse] =
+    useState<CheckedState>(false);
   const [tableData, setTableData] = useState<individualsReportProp[] | null>();
   const { fetchData, loading } = useHttp<any, individualsReportProp[]>();
 
@@ -43,9 +44,7 @@ export default function IndividualsReport() {
       form,
       originalData: originalData ?? [],
     });
-
-    console.log("Filtered data: ", filteredData);
-    setFilteredData(filteredData); 
+    setFilteredData(filteredData);
   };
 
   const form = useForm<z.infer<typeof FormSchema>>({
@@ -61,22 +60,18 @@ export default function IndividualsReport() {
       `report/${id}`,
       "GET"
     )) as individualsReportProp[];
-    setOriginalData(res); 
-    setFilteredData(res); 
+    setOriginalData(res);
+    setFilteredData(res);
   };
 
   const clearFilters = () => {
-    form.reset();  
-    setFilteredData(originalData); 
-    setShowTotalResponse(false);   
-  };
-
-  const SwitchToChart = () => {
-    setChartType(!chartType);
+    form.reset();
+    setFilteredData(originalData);
+    setShowTotalResponse(false);
   };
 
   useEffect(() => {
-    getData(); 
+    getData();
   }, []);
 
   if (loading) return <div>Loading...</div>;
@@ -133,18 +128,9 @@ export default function IndividualsReport() {
           <Button type="button" onClick={clearFilters} variant="outline">
             Clear Filter
           </Button>
-          <Button type="button" variant="ghost" onClick={SwitchToChart}>
-            Switch to Chart
-          </Button>
         </form>
       </Form>
-
-      {chartType ? (
-        <IndividualsChart data={filteredData} filteredData={[]} />
-      ) : (
-        <DataTable columns={columns} data={filteredData} />
-      )}
-
+      <DataTable columns={columns} data={filteredData} />
       {showTotalResponse && (
         <div className="text-sm text-muted-foreground">
           Total: {filteredData.length}

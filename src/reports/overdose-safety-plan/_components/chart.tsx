@@ -20,7 +20,7 @@ export default function OverdoseSafetyPlanChart({ data }: Props) {
     const countMap: Record<string, number> = {};
 
     data.forEach((item) => {
-      const program = item.programOrSite || "Unknown";
+      const program = item.ProgramOrSite || "Unknown";
       countMap[program] = (countMap[program] || 0) + 1;
     });
 

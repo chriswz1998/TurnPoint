@@ -5,7 +5,7 @@ import { individualsReportProp } from "@/reports/individuals-report/_components/
 interface FilterParams {
   form: UseFormReturn<{
     individual?: string;
-    site?: string;
+    program?: string;
   }>;
   originalData: individualsReportProp[];
 }
@@ -15,21 +15,19 @@ export function filterData({
   originalData,
 }: FilterParams): individualsReportProp[] {
   let filteredData = originalData ?? [];
+  const { individual, program } = form.getValues();
 
-  if (form.getValues().individual) {
+  if (individual) {
     filteredData = filteredData.filter((data) =>
-      data.individual
-        .toLowerCase()
-        .includes(form.getValues().individual!.toLowerCase())
+      data.person.toLowerCase().includes(individual.toLowerCase())
     );
   }
 
-  if (form.getValues().site) {
-    filteredData = filteredData.filter((data) =>
-      data.site
-        .toLowerCase()
-        .includes(form.getValues().site!.toLowerCase())
-    );
+  if (program) {
+    filteredData = filteredData.filter((data) => {
+      const siteValue = data.site ? data.site.toLowerCase() : "";
+      return siteValue.includes(program.toLowerCase());
+    });
   }
 
   return filteredData;

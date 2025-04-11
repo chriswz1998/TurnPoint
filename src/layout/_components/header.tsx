@@ -1,4 +1,4 @@
-import { useLocation } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import {
   Breadcrumb,
   BreadcrumbItem,
@@ -35,8 +35,9 @@ export const Header = () => {
   const location = useLocation();
   const pathnames = location.pathname.split("/").filter(Boolean);
 
+
   return (
-    <header className="h-16 w-full border-b bg-white dark:bg-neutral-950 px-6 shadow-sm flex items-center justify-between">
+    <header className="p-4 w-full border-b bg-white dark:bg-neutral-950 px-6 shadow-sm flex items-center justify-between">
       {/* 左边：侧边栏按钮 + 面包屑 */}
       <div className="flex items-center gap-4">
         <SidebarTrigger className="-ml-1" />
@@ -63,11 +64,13 @@ export const Header = () => {
                           {label}
                         </BreadcrumbPage>
                       ) : (
-                        <BreadcrumbLink
-                          href={url}
-                          className="text-sm text-muted-foreground hover:underline"
-                        >
-                          {label}
+                        <BreadcrumbLink asChild>
+                          <Link
+                            to={url}
+                            className="text-sm text-muted-foreground hover:underline"
+                          >
+                            {label}
+                          </Link>
                         </BreadcrumbLink>
                       )}
                     </BreadcrumbItem>
