@@ -97,6 +97,38 @@ turnpoint/
 
 ---
 
+## 📦 Installation Instructions
+
+Thank you for choosing **TurnPoint**!  
+Follow the steps below to install and run the application:
+
+### 1. Download
+
+- Visit the [TurnPoint v1.0.0 Release Page](https://github.com/chriswz1998/TurnPoint/releases/tag/v1.0.0).
+- Under the **Assets** section, download the installer file appropriate for your system:
+    - **Windows**: Download the `.exe` file (e.g., `TurnPoint Setup v1.0.0.exe`)
+    - **MacOS**: Download the `.dmg` file (e.g., `TurnPoint-v1.0.0.dmg`)
+    - **Linux**: Download the `.AppImage` or `.deb` file (depending on your distribution)
+
+### 2. Install
+
+#### Windows
+- Double-click the downloaded `.exe` file.
+- Follow the on-screen instructions to complete the installation.
+- If Windows shows a "Windows protected your PC" warning, click **More Info** → **Run Anyway**.
+
+#### MacOS (expect next version)
+- Open the downloaded `.dmg` file.
+- Drag the **TurnPoint** application into your **Applications** folder.
+- If you encounter a security prompt (because the app is not notarized), go to:
+    - **System Preferences** → **Security & Privacy** → **General** → Click **Open Anyway**.
+
+### 3. Launch
+- After installation, open the TurnPoint application from your system’s application menu or desktop shortcut.
+
+### 4. Troubleshooting
+- Ensure your operating system meets the basic system requirements.
+- If you face installation or launch issues, please check the Issues page or submit a new ticket.
 ## 📄 License
 
 MIT License © 2025 [Turning Point]
