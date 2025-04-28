@@ -28,7 +28,7 @@ export default function SiteListReport() {
   const filter = () => {
     const filteredData = filterSiteListData({
       form,
-      HousingType: searchHousingType,
+      housingType: searchHousingType,
       originalData: originalData ?? [],
     });
     setTableData(filteredData);

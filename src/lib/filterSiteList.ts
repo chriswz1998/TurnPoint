@@ -4,7 +4,7 @@ export const filterSiteListData = ({
 }: {
   form: any;
   originalData: any[];
-  HousingType?: string;
+  housingType?: string;
 }) => {
   const values = form.getValues();
   console.log("Filtering with Site:", values.site);
