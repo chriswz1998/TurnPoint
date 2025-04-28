@@ -26,6 +26,7 @@ export const columns: ColumnDef<losOfServiceProps>[] = [
   {
     accessorKey: "EndDateTimeOfLOS",
     header: "End Date",
+    // Format the End Date field
     cell: ({ row }) => formatDate(new Date(row.original.EndDateTimeOfLOS)),
   },
   {
@@ -55,6 +56,7 @@ export const columns: ColumnDef<losOfServiceProps>[] = [
   {
     accessorKey: "StartDateTimeOfLOS",
     header: "Start Date",
+    // Format the Start Date field
     cell: ({ row }) => formatDate(new Date(row.original.StartDateTimeOfLOS)),
   },
   {

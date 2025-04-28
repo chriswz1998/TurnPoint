@@ -2,8 +2,8 @@ import { useState } from "react";
 import toast from "react-hot-toast";
 import { fetch } from "@tauri-apps/plugin-http";
 
-const base_url = "http://20.64.238.104:3000";
-// const base_url = "http://localhost:3000";
+//const base_url = "http://20.64.238.104:3000";
+const base_url = "http://localhost:3000";
 const local_token = localStorage.getItem("access_token");
 // @ts-ignore
 const useFetch = <IP, OP>() => {

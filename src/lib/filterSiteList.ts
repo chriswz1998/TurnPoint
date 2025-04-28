@@ -4,18 +4,20 @@ export const filterSiteListData = ({
 }: {
   form: any;
   originalData: any[];
-  housingType?: string;
 }) => {
   const values = form.getValues();
   console.log("Filtering with Site:", values.site);
+  console.log("Filtering with HousingType:", values.housingType);
 
   return originalData.filter((item) => {
-    console.log("Item Site:", item.Site);
-
     const siteMatch = values.site
       ? item.Site && item.Site.toLowerCase().includes(values.site.toLowerCase())
       : true;
 
-    return siteMatch;
+    const housingTypeMatch = values.housingType
+      ? item.HousingType && item.HousingType.toLowerCase().includes(values.housingType.toLowerCase())
+      : true;
+
+    return siteMatch && housingTypeMatch;
   });
 };

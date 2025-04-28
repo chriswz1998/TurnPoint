@@ -16,7 +16,7 @@ import { CheckedState } from "@radix-ui/react-checkbox";
 import { Checkbox } from "@/components/ui/checkbox.tsx";
 
 export default function SiteListReport() {
-  const [searchHousingType, setHousingType] = useState<string | undefined>();
+  const [, setHousingType] = useState<string | undefined>();
   const { id } = useParams();
   const [originalData, setOriginalData] = useState<siteListProps[] | null>();
   const [tableData, setTableData] = useState<siteListProps[] | null>();
@@ -28,7 +28,6 @@ export default function SiteListReport() {
   const filter = () => {
     const filteredData = filterSiteListData({
       form,
-      housingType: searchHousingType,
       originalData: originalData ?? [],
     });
     setTableData(filteredData);
@@ -87,10 +86,10 @@ export default function SiteListReport() {
 
           {/* Filtro por Housing Type */}
           <Input
+            className="w-72"
             placeholder="Filter by Housing Type"
             value={form.watch("housingType")}
             onChange={(e) => form.setValue("housingType", e.target.value)}
-            className="w-[240px]"
           />
 
           {/* Mostrar total de respuestas */}

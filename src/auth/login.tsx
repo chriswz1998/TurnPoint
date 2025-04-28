@@ -21,10 +21,12 @@ import { useNavigate } from "react-router-dom";
 import { useAuth, UserProps } from "@/context/AuthContext.tsx";
 import logo from "../assets/logo.svg";
 
+// Interface for the response data from the login API, which includes user info and an access token.
 interface ResponesProps extends UserProps {
   access_token: string;
 }
 
+// Form validation schema using zod
 const FormSchema = z.object({
   email: z.string().min(2, {
     message: "email is required.",
@@ -35,10 +37,11 @@ const FormSchema = z.object({
 });
 
 export const Login = () => {
-  const { setUser } = useAuth();
-  const { loading, fetchData } = useFetch();
-  const navigate = useNavigate();
+  const { setUser } = useAuth(); // Get the function to set user in the AuthContext
+  const { loading, fetchData } = useFetch();  // Fetch function from the custom hook
+  const navigate = useNavigate(); // React Router's navigate function
 
+  // Form initialization with react-hook-form and schema validation
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
     defaultValues: {
@@ -47,26 +50,29 @@ export const Login = () => {
     },
   });
 
+    // Form submission handler
   async function onSubmit(data: z.infer<typeof FormSchema>) {
+    console.log("Form data:", data);   // Log the form data to verify the input values
     const res = await fetchData<z.infer<typeof FormSchema>, ResponesProps>(
       "auth/login",
       "POST",
       data,
     );
+    console.log("Login response:", res);  // Log the response from the API for debugging
     if (res && res.access_token) {
-      localStorage.setItem("access_token", res?.access_token); // 存储 access_token
-      setUser(res);
-      toast.success("Login successfully!");
-      navigate("/dashboard");
+      localStorage.setItem("access_token", res?.access_token);  // Save the access token in localStorage
+      setUser(res); // Update the user context with the response data
+      toast.success("Login successfully!"); // Display success message
+      navigate("/dashboard"); // Redirect to the dashboard after successful login
     }
   }
 
   return (
     <div className="flex w-full h-full sm:bg-custom-bg md:bg-custom-bg lg:bg-none">
       <div className="min-h-screen w-1/2 bg-white px-6 mx-auto flex flex-col items-center">
-        {/* 图片紧贴顶部 */}
+        {/* Logo image centered at the top */}
         <img src={logo} alt="Logo" className="self-center" />
-        {/* 表单上下左右居中 */}
+        {/* Form container centered in the middle */}
         <div className="flex-1 w-full flex items-center justify-center">
           <Form {...form}>
             <form
