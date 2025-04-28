@@ -16,6 +16,7 @@ import { CheckedState } from "@radix-ui/react-checkbox";
 import { Checkbox } from "@/components/ui/checkbox.tsx";
 
 export default function SiteListReport() {
+  const [searchHousingType, setHousingType] = useState<string | undefined>();
   const { id } = useParams();
   const [originalData, setOriginalData] = useState<siteListProps[] | null>();
   const [tableData, setTableData] = useState<siteListProps[] | null>();
@@ -27,24 +28,28 @@ export default function SiteListReport() {
   const filter = () => {
     const filteredData = filterSiteListData({
       form,
+      HousingType: searchHousingType,
       originalData: originalData ?? [],
     });
     setTableData(filteredData);
   };
 
   const clearFilter = () => {
-    form.reset({ site: "" });
+    form.reset({ site: "", housingType: "" });
     setTableData(originalData ?? []);
+    setHousingType(undefined);
   };
 
   const FormSchema = z.object({
     site: z.string().optional(),
+    housingType: z.string().optional(),
   });
 
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
     defaultValues: {
       site: "",
+      housingType: "",
     },
   });
 
@@ -72,6 +77,7 @@ export default function SiteListReport() {
         <h2 className="text-2xl font-semibold">Site List Report</h2>
 
         <div className="flex flex-wrap gap-4 items-center">
+          {/* Filtro por Site */}
           <Input
             placeholder="Filter by Site"
             value={form.watch("site")}
@@ -79,7 +85,15 @@ export default function SiteListReport() {
             className="w-[240px]"
           />
 
-          {/* Show total count */}
+          {/* Filtro por Housing Type */}
+          <Input
+            placeholder="Filter by Housing Type"
+            value={form.watch("housingType")}
+            onChange={(e) => form.setValue("housingType", e.target.value)}
+            className="w-[240px]"
+          />
+
+          {/* Mostrar total de respuestas */}
           <div className="flex items-center space-x-2">
             <span>Total Responses</span>
             <Checkbox
@@ -88,7 +102,7 @@ export default function SiteListReport() {
             />
           </div>
 
-          {/* Actions */}
+          {/* Acciones */}
           <Button onClick={filter}>Apply Filter</Button>
           <Button variant="outline" onClick={clearFilter}>
             Clear Filter
@@ -96,7 +110,7 @@ export default function SiteListReport() {
         </div>
       </div>
 
-      {/* Visualization */}
+      {/* Visualización */}
       <DataTable columns={columns} data={tableData ?? []} />
       <div>{showTotalResponse && <p>total is {tableData?.length}</p>}</div>
     </div>

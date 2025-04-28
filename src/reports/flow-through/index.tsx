@@ -3,6 +3,7 @@ import { CalendarIcon } from "lucide-react";
 import { Checkbox } from "@/components/ui/checkbox.tsx";
 import { cn } from "@/lib/utils.ts";
 import { Calendar } from "@/components/ui/calendar.tsx";
+import { Input } from "@/components/ui/input.tsx";
 import {
   Popover,
   PopoverContent,
@@ -22,6 +23,10 @@ import FlowThroughCharts from "@/reports/flow-through/_components/chart.tsx";
 import { filterData } from "@/reports/flow-through/lib/filterByDateRange.ts";
 
 export default function FlowThroughReport() {
+  const [searchProgramOrSite, setSearchProgramOrSite] = useState<
+    string | undefined
+  >();
+  const [searchExitReason, setExitReason] = useState<string | undefined>();
   const { id } = useParams();
   const [startDate, setStartDate] = useState<Date>();
   const [endDate, setEndDate] = useState<Date>();
@@ -40,7 +45,9 @@ export default function FlowThroughReport() {
       filterData(originalData ?? [], {
         from: startDate,
         to: endDate,
-      }),
+        programOrSite: searchProgramOrSite,
+        exitReason: searchExitReason,
+      })
     );
   };
 
@@ -49,6 +56,8 @@ export default function FlowThroughReport() {
     setStartDate(undefined);
     setEndDate(undefined);
     setShowTotalResponse(false);
+    setSearchProgramOrSite(undefined);
+    setExitReason(undefined);
   };
 
   const SwitchToChart = () => {
@@ -58,7 +67,7 @@ export default function FlowThroughReport() {
   const getData = async () => {
     const res = (await fetchData(
       `report/${id}`,
-      "GET",
+      "GET"
     )) as flowThroughDataProps[];
     setTableData(res);
     setOriginalData(res);
@@ -78,13 +87,25 @@ export default function FlowThroughReport() {
         <h2 className="text-2xl font-semibold">Flow-Through Report</h2>
         {/*{JSON.stringify(tableData)}*/}
         <div className="flex items-center space-x-4">
+          <Input
+            className="w-72"
+            placeholder="Search by Program/Site"
+            value={searchProgramOrSite ?? ""}
+            onChange={(e) => setSearchProgramOrSite(e.target.value)}
+          />
+          <Input
+            className="w-72"
+            placeholder="Search by Exit Reason"
+            value={searchExitReason ?? ""}
+            onChange={(e) => setExitReason(e.target.value)}
+          />
           <Popover>
             <PopoverTrigger asChild>
               <Button
                 variant={"outline"}
                 className={cn(
                   "w-[240px] justify-start text-left font-normal",
-                  !startDate && "text-muted-foreground",
+                  !startDate && "text-muted-foreground"
                 )}
               >
                 <CalendarIcon />
@@ -110,7 +131,7 @@ export default function FlowThroughReport() {
                 variant={"outline"}
                 className={cn(
                   "w-[240px] justify-start text-left font-normal",
-                  !endDate && "text-muted-foreground",
+                  !endDate && "text-muted-foreground"
                 )}
               >
                 <CalendarIcon />

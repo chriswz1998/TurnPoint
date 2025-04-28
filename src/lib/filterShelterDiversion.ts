@@ -9,11 +9,15 @@ interface FilterParams {
     initialFollowUpDate?: Date;
   }>;
   originalData: shelderDiversionFollowupProps[];
+  divertedTo?: string;
+  diversionMethod?: string;
 }
 
 export function filterData({
   form,
   originalData = [],
+  divertedTo,
+  diversionMethod,
 }: FilterParams): shelderDiversionFollowupProps[] {
   const formValues = form.getValues();
   const {
@@ -45,11 +49,23 @@ export function filterData({
       (item.initialFollowUpDate &&
         new Date(item.initialFollowUpDate) >= new Date(initialFollowUpDate));
 
+    const matchesDivertedTo =
+      !divertedTo ||
+      (item.divertedTo || "").toLowerCase().includes(divertedTo.toLowerCase());
+
+    const matchesDiversionMethod =
+      !diversionMethod ||
+      (item.diversionMethod || "")
+        .toLowerCase()
+        .includes(diversionMethod.toLowerCase());
+
     return (
       matchesCommunity &&
       matchesEviction &&
       matchesDiversion &&
-      matchesFollowUpDate
+      matchesFollowUpDate &&
+      matchesDivertedTo &&
+      matchesDiversionMethod
     );
   });
 }

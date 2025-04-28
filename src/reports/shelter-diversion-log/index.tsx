@@ -33,6 +33,10 @@ import { filterData } from "@/lib/filterShelterDiversion";
 import ShelterDiversionChart from "./_components/chart";
 
 export default function ShelterDiversion() {
+  const [searchDivertedTo, setDivertedTo] = useState<string | undefined>();
+  const [searchDiversionMethod, setDiversionMethod] = useState<
+    string | undefined
+  >();
   const { id } = useParams();
   const [chartType, setChartType] = useState<boolean>(false);
   const [initialFollowUpDate, setInitialFollowUpDate] = useState<Date>();
@@ -54,6 +58,8 @@ export default function ShelterDiversion() {
     const filteredData = filterData({
       form,
       originalData: originalData ?? [],
+      divertedTo: searchDivertedTo,
+      diversionMethod: searchDiversionMethod,
     });
 
     console.log("Filtered data: ", filteredData);
@@ -81,6 +87,8 @@ export default function ShelterDiversion() {
     setInitialFollowUpDate(undefined);
     setTableData(originalData ?? []);
     setShowTotalResponse(false);
+    setDiversionMethod(undefined);
+    setDivertedTo(undefined);
     form.reset({
       community: "",
       evictionPrevention: "",
@@ -96,7 +104,7 @@ export default function ShelterDiversion() {
   const getData = async () => {
     const res = (await fetchData(
       `report/${id}`,
-      "GET",
+      "GET"
     )) as shelderDiversionFollowupProps[];
 
     console.log("Fetched Data: ", res);
@@ -122,6 +130,18 @@ export default function ShelterDiversion() {
         </h2>
 
         <div className="flex flex-wrap gap-4 items-center">
+          <Input
+            className="w-72"
+            placeholder="Diverted To"
+            value={searchDivertedTo ?? ""}
+            onChange={(e) => setDivertedTo(e.target.value)}
+          />
+          <Input
+            className="w-72"
+            placeholder="Search by Diversion Method"
+            value={searchDiversionMethod ?? ""}
+            onChange={(e) => setDiversionMethod(e.target.value)}
+          />
           {/* Filter by Date */}
           <Popover>
             <PopoverTrigger asChild>
@@ -129,7 +149,7 @@ export default function ShelterDiversion() {
                 variant={"outline"}
                 className={cn(
                   "w-[240px] justify-start text-left font-normal",
-                  !initialFollowUpDate && "text-muted-foreground",
+                  !initialFollowUpDate && "text-muted-foreground"
                 )}
               >
                 <CalendarIcon />

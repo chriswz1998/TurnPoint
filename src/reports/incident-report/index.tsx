@@ -197,7 +197,7 @@ export default function IncidentReport() {
                   <FormItem>
                     <FormControl>
                       <Input
-                        placeholder="Search by Type of Serious Incident"
+                        placeholder="Search by Type Incident"
                         {...field}
                       />
                     </FormControl>
