@@ -1,5 +1,11 @@
+// GradientBackgroundContainer.tsx
+// This component serves as a layout wrapper that applies a decorative gradient background 
+// behind its children elements. It can be customized with a className prop for additional styling.
+
 import React from 'react'
 
+// GradientBackgroundContainer is a reusable layout component 
+// that provides a decorative gradient background behind its children elements
 const GradientBackgroundContainer = ({
   children,
   className = ''
@@ -9,7 +15,7 @@ const GradientBackgroundContainer = ({
 }) => {
   return (
     <div className={`relative isolate overflow-hidden bg-white ${className}`}>
-      {/* 背景装饰图形 */}
+       {/* Background decorative shape */}
       <div
         aria-hidden="true"
         className="absolute -top-80 left-[max(6rem,33%)] -z-10 transform-gpu blur-3xl sm:left-1/2 md:top-20 lg:ml-20 xl:top-3 xl:ml-56"
@@ -23,7 +29,8 @@ const GradientBackgroundContainer = ({
         />
       </div>
 
-      {/* 插入的页面内容 */}
+       {/* Inserted page content (children elements) */}
+      {/* If you need to modify what is rendered inside, adjust the 'children' passed to this component */}
       <div className="relative z-10">{children}</div>
     </div>
   )

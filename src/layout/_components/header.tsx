@@ -1,3 +1,8 @@
+// Header.tsx
+// The Header component renders a page header with a sidebar trigger button on the left 
+// and dynamic breadcrumbs based on the current route. It also reserves space on the right 
+// side for future user avatar, notifications, or settings actions.
+
 import { Link, useLocation } from "react-router-dom";
 import {
   Breadcrumb,
@@ -6,11 +11,12 @@ import {
   BreadcrumbList,
   BreadcrumbPage,
   BreadcrumbSeparator,
-} from "@/components/ui/breadcrumb";
+} from "@/components/ui/breadcrumb"; // Import breadcrumb UI components
 import React from "react";
-import { SidebarTrigger } from "@/components/ui/sidebar.tsx";
-import { Separator } from "@/components/ui/separator.tsx";
+import { SidebarTrigger } from "@/components/ui/sidebar.tsx"; // Sidebar open/close button
+import { Separator } from "@/components/ui/separator.tsx"; // Vertical separator component
 
+// Mapping of paths to readable breadcrumb labels
 const breadcrumbNameMap: Record<string, string> = {
   "/Dashboard": "Dashboard",
   "/UploadFile": "Upload File",
@@ -31,19 +37,24 @@ const breadcrumbNameMap: Record<string, string> = {
   "/report/site-list": "Site List",
 };
 
-export const Header = () => {
+// Header component
+export const Header = () => { // Get current location
   const location = useLocation();
-  const pathnames = location.pathname.split("/").filter(Boolean);
+  const pathnames = location.pathname.split("/").filter(Boolean); // Split and clean the path
 
 
   return (
     <header className="p-4 w-full border-b bg-white dark:bg-neutral-950 px-6 shadow-sm flex items-center justify-between">
-      {/* 左边：侧边栏按钮 + 面包屑 */}
+      {/* Left side: Sidebar trigger button + Breadcrumb */}
       <div className="flex items-center gap-4">
+        {/* Sidebar open/close button */}
         <SidebarTrigger className="-ml-1" />
+        {/* Vertical separator */}
         <Separator orientation="vertical" className="h-6" />
+        {/* Breadcrumb navigation */}
         <Breadcrumb>
           <BreadcrumbList>
+          {/* If at root ("/"), show 'Home' */}
             {pathnames.length === 0 ? (
               <BreadcrumbItem>
                 <BreadcrumbPage className="text-base font-medium">
@@ -51,10 +62,11 @@ export const Header = () => {
                 </BreadcrumbPage>
               </BreadcrumbItem>
             ) : (
+              // Otherwise, map each segment of the URL into breadcrumbs
               pathnames.map((segment, index) => {
                 const url = `/${pathnames.slice(0, index + 1).join("/")}`;
                 const isLast = index === pathnames.length - 1;
-                const label = breadcrumbNameMap[url] || segment;
+                const label = breadcrumbNameMap[url] || segment; // Use friendly name or fallback
 
                 return (
                   <React.Fragment key={url}>
@@ -74,6 +86,7 @@ export const Header = () => {
                         </BreadcrumbLink>
                       )}
                     </BreadcrumbItem>
+                    {/* Only render separator if not the last item */}
                     {!isLast && <BreadcrumbSeparator />}
                   </React.Fragment>
                 );
@@ -83,10 +96,9 @@ export const Header = () => {
         </Breadcrumb>
       </div>
 
-      {/* 右边（预留按钮/头像区域） */}
+      {/* Right side: Placeholder for avatar, notifications, settings */}
       <div className="flex items-center gap-4">
-        {/* 放头像、通知铃铛、设置按钮之类 */}
-        {/* <UserAvatar /> */}
+         {/* Future spot for <UserAvatar />, <NotificationsBell />, <SettingsButton />, etc. */}
       </div>
     </header>
   );

@@ -6,36 +6,52 @@ export function getFilteredLOSDataByType(
 ): losOfServiceProps[] {
   switch (value) {
     case "Total Responses by Program/Site":
-      // 假设筛选出 ProgramOrSite 不为 null 的记录
+      // Filter records where ProgramOrSite is not null
       return data.filter((item) => item.ProgramOrSite !== null);
 
     case "Avg Length of LOS by Program/Site":
-      // 筛选出 Start 和 End 都存在的记录
+      // Filter records where both Start and End dates exist
       return data.filter(
-        (item) => item.StartDateTimeOfLOS && item.EndDateTimeOfLOS,
+        (item) => item.StartDateTimeOfLOS && item.EndDateTimeOfLOS
       );
 
     case "Critical Incidents % by Program/Site":
-      // 筛选出与关键事件相关的记录
+      // Filter records related to critical incidents
       return data.filter(
         (item) =>
           item.ProgramOrSite &&
-          item.WasThisRelatedToACriticalIncident === "Yes",
+          item.WasThisRelatedToACriticalIncident === "Yes"
       );
 
     case "Total & Avg LOS by Program/Site":
-      // 同样需要有 Start 和 End 的记录
+      // Filter records where ProgramOrSite, Start, and End dates all exist
       return data.filter(
         (item) =>
           item.ProgramOrSite &&
           item.StartDateTimeOfLOS &&
-          item.EndDateTimeOfLOS,
+          item.EndDateTimeOfLOS
       );
 
     case "Total & Avg Review for TPCS LOS":
-      // 筛选出 TPCS Review 为 Yes 的记录
+      // Filter records where ReviewForTPCSLOS is "Yes"
       return data.filter(
-        (item) => item.ProgramOrSite && item.ReviewForTPCSLOS === "Yes",
+        (item) => item.ProgramOrSite && item.ReviewForTPCSLOS === "Yes"
+      );
+
+    // New filter: Filter by "ProgramOrSite"
+    case "Program/Site":
+      return data.filter((item) => item.ProgramOrSite !== null);
+
+    // New filter: Filter by "RationaleForLOSMore48Hours"
+    case "Rationale":
+      return data.filter(
+        (item) => item.RationaleForLOSMore48Hours !== null
+      );
+
+    // New filter: Filter by "ReasonAndRationaleForRestriction"
+    case "Reason for Restriction":
+      return data.filter(
+        (item) => item.ReasonAndRationaleForRestriction !== null
       );
 
     default:

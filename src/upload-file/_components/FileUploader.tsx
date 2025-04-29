@@ -1,4 +1,17 @@
 // components/FileUploader.tsx
+/**
+ * FileUploader Component
+ *
+ * This component allows users to upload Excel files, process them based on selected file types, 
+ * and send the processed data to the server.
+ * The file type selection and the file itself are handled separately, and once a file is uploaded, 
+ * the data is sent to the backend.
+ * 
+ * How to modify:
+ * - To add additional file types, modify the `filetypes` array from `@/lib/mock.ts`.
+ * - Customize the `processExcelFile` function for processing different formats or adding new processing logic.
+ * - Adjust the backend endpoint in the `fetchData` function if necessary, depending on the server-side implementation.
+ */
 
 import React, { useEffect, useState } from 'react'
 import { Button } from '@/components/ui/button.tsx'

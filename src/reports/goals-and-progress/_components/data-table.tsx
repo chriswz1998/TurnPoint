@@ -1,3 +1,20 @@
+// Data-table.tsx
+//
+// This file defines a generic `DataTable` component that takes in a list of columns and data,
+// and renders a table using the provided information. The table is built using the `@tanstack/react-table`
+// library, and it provides features like rendering data dynamically, handling row selection, and displaying
+// a "No results" message when there is no data.
+//
+// To modify:
+// 1. **Changing Column Definitions**:
+//    - The `columns` prop defines the structure of the table columns. You can modify the column headers or data rendering logic by updating the `columns` array that is passed into the component.
+//    - For example, to change the header of a column, simply modify the `header` property of the corresponding column object.
+//
+// 2. **Modifying Data Rendering**:
+//    - To modify how the data is displayed in each cell, update the `cell` property of each column object in the `columns` array.
+//    - The `flexRender` function is used to dynamically render the content of each cell, which allows you to use custom rendering functions for cells.
+
+
 "use client";
 
 import {

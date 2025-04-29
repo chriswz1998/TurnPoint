@@ -1,3 +1,16 @@
+/**
+ * DataTable Component
+ *
+ * This is a reusable table component built using TanStack React Table library. 
+ * It accepts `columns` and `data` as props to render a table with dynamic headers and rows.
+ * The table is flexible and can be customized by modifying the `columns` and `data` props.
+ * It handles the rendering of both headers and rows based on the provided column definitions.
+ * 
+ * How to modify:
+ * - To adjust the table's appearance or behavior, modify the `columns` and `data` props.
+ * - You can add more functionality such as sorting, pagination, etc., by extending the `useReactTable` setup.
+ */
+
 "use client";
 
 import {
@@ -16,15 +29,18 @@ import {
   TableRow,
 } from "@/components/ui/table";
 
+// DataTable component to render a table with dynamic rows and columns
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
   data: TData[];
 }
 
+// DataTable functional component
 export function DataTable<TData, TValue>({
   columns,
   data,
 }: DataTableProps<TData, TValue>) {
+  // Use react-table hook to handle the table's core logic
   const table = useReactTable({
     data,
     columns,
@@ -35,6 +51,7 @@ export function DataTable<TData, TValue>({
     <div className="rounded-md border">
       <Table>
         <TableHeader>
+          {/* Loop through header groups and render headers */}
           {table.getHeaderGroups().map((headerGroup) => (
             <TableRow key={headerGroup.id}>
               {headerGroup.headers.map((header) => {
@@ -53,6 +70,7 @@ export function DataTable<TData, TValue>({
           ))}
         </TableHeader>
         <TableBody>
+          {/* Render rows if data is available, else show a "No results" message */}
           {table.getRowModel().rows?.length ? (
             table.getRowModel().rows.map((row) => (
               <TableRow

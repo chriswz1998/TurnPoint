@@ -1,3 +1,19 @@
+/**
+ * RentSupplementReport Component
+ * 
+ * This component is designed to display a report for rent supplement requests. It allows users
+ * to search for individuals by name, toggle the display of the total amount, and view the 
+ * results in a data table format. It fetches the data from a server and provides search and 
+ * reset functionality. The component makes use of various UI elements like buttons, checkboxes,
+ * and input fields for user interaction. The report data is displayed in a table, and the 
+ * total amount can be toggled on or off.
+ * 
+ * How to modify:
+ * - To modify the search functionality, you can update the `searchByIndividual` function.
+ * - To change the report columns, modify the `columns` array imported from `@/reports/rent-supplement-request/_components/columns`.
+ * - You can adjust the endpoint for fetching data by modifying the URL in the `getData` function.
+ */
+
 import { Button } from "@/components/ui/button.tsx";
 import { Input } from "@/components/ui/input.tsx";
 import { DataTable } from "@/reports/rent-supplement-request/_components/data-table";
@@ -14,6 +30,8 @@ import { Checkbox } from "@/components/ui/checkbox.tsx";
 
 export default function RentSupplementReport() {
   const { id } = useParams();
+
+    // State variables to manage the search value, original data, table data, and the checkbox state
   const [searchValue, setSearchValue] = useState<string | undefined>();
   const [originalData, setOriginalData] = useState<
     rentSupplementsProps[] | null
@@ -22,19 +40,22 @@ export default function RentSupplementReport() {
     useState<CheckedState>(false);
 
   const [tableData, setTableData] = useState<rentSupplementsProps[] | null>();
-
+  // Custom hook for handling HTTP requests
   const { fetchData, loading } = useHttp<any, rentSupplementsProps[]>();
 
+   // Function to perform the search based on the search value
   const search = () => {
     const result = searchByIndividual(originalData ?? [], searchValue ?? "");
     setTableData(result);
   };
 
+  // Function to clear the search and reset the table data
   const clearSearch = async () => {
     setTableData(originalData);
     setSearchValue(undefined);
   };
 
+  // Function to fetch the data for the report based on the 'id' from the URL
   const getData = async () => {
     const res = (await fetchData(
       `report/${id}`,
@@ -43,14 +64,17 @@ export default function RentSupplementReport() {
     console.log(res);
     console.log(id);
 
+    // Set the fetched data into state
     setTableData(res);
     setOriginalData(res);
   };
 
+  // Fetch the data when the component is mounted
   useEffect(() => {
     getData();
   }, []);
 
+  // Show a loading state while fetching data
   if (loading) {
     return <div>loading...</div>;
   }

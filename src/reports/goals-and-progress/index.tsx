@@ -1,3 +1,26 @@
+/**
+ * Goals Progress Report Component
+ * 
+ * This component displays a Goals and Progress report with filtering options based on various date ranges 
+ * (start date, completion date, and discontinued date) and search criteria (individual, program/site, goal type).
+ * The report data is fetched from an API, and users can filter the data dynamically using forms and date pickers.
+ * Users can also toggle between a table view and a chart view (Bar charts) for visualizing the goals' progress.
+ * 
+ * Key Features:
+ * - Filters the report data based on user input (start date, completion date, discontinued date).
+ * - Allows users to search goals by individual, program/site, or goal type.
+ * - Switches between table and chart view to visualize data.
+ * - Displays the total number of responses when enabled.
+ * - Clears the selected filters and resets the form.
+ * 
+ * How to modify:
+ * - To change the filtering logic, modify the `filterData` function imported from `@/lib/filterGoalsAndProgressLogic`.
+ * - To update the fields that users can filter by, modify the `FormSchema` object.
+ * - To customize the columns or add more data points in the table, update the `columns` array imported from 
+ *   `@/reports/goals-and-progress/_components/columns`.
+ * - To modify the visual representation of the chart, update the `GoalsAndProgressCharts` component.
+ */
+
 import { Button } from "@/components/ui/button.tsx";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
@@ -34,6 +57,7 @@ import GoalsAndProgressCharts from "./_components/chart";
 
 import { filterData } from "@/lib/filterGoalsAndProgressLogic";
 
+// Component for displaying and filtering the Goals and Progress Report
 export default function GoalsProgressReport() {
   const { id } = useParams();
   const [startDate, setStartDate] = useState<Date>();
@@ -49,6 +73,7 @@ export default function GoalsProgressReport() {
   const [showTotalResponse, setShowTotalResponse] =
     useState<CheckedState>(false);
 
+    // Function for applying filters
   const filter = () => {
     console.log("Filtering with:");
     console.log("Start Date: ", startDate);
@@ -65,9 +90,10 @@ export default function GoalsProgressReport() {
     });
 
     console.log("Filtered data: ", filteredData);
-    setTableData(filteredData);
+    setTableData(filteredData); // Set the filtered data to the table
   };
 
+  // Zod schema for validating form data
   const FormSchema = z.object({
     individual: z.string(),
     programSite: z.string(),
@@ -75,7 +101,7 @@ export default function GoalsProgressReport() {
   });
 
   const form = useForm<z.infer<typeof FormSchema>>({
-    resolver: zodResolver(FormSchema),
+    resolver: zodResolver(FormSchema), // Resolve the validation using Zod
     defaultValues: {
       individual: undefined,
       programSite: undefined,
@@ -83,6 +109,7 @@ export default function GoalsProgressReport() {
     },
   });
 
+  // Functions for submitting form data for different filters
   const onSubmitIndividual = (data: z.infer<typeof FormSchema>) => {
     console.log("Searching by individual: ", data);
   };
@@ -95,23 +122,26 @@ export default function GoalsProgressReport() {
     console.log("Goal Type Submitted:", data);
   };
 
+   // Clear all filters and reset the form
   const clearFilter = async () => {
-    setTableData(originalData);
-    setStartDate(undefined);
-    setDiscontinuedDate(undefined);
-    setCompletionDate(undefined);
-    setShowTotalResponse(false);
-    form.reset({
+    setTableData(originalData); // Reset the table data to the original (unfiltered) data
+    setStartDate(undefined); // Clear start date filter
+    setDiscontinuedDate(undefined); // Clear discontinued date filter
+    setCompletionDate(undefined); // Clear completion date filter
+    setShowTotalResponse(false); // Reset the checkbox state
+    form.reset({ // Reset the form to its default state
       individual: "",
       programSite: "",
       goalType: "",
     });
   };
 
+  // Toggle between showing the table and the chart view
   const SwitchToChart = () => {
     setChartType(!chartType);
   };
 
+  // Fetch data from the server using the report ID
   const getData = async () => {
     const res = (await fetchData(
       `report/${id}`,
@@ -121,6 +151,7 @@ export default function GoalsProgressReport() {
     console.log("Fetched Data: ", res);
     console.log("ID:", id);
 
+    // Set the fetched data to the tableData and originalData states
     setTableData(Array.isArray(res) ? res : []);
     setOriginalData(Array.isArray(res) ? res : []);
   };
@@ -129,6 +160,7 @@ export default function GoalsProgressReport() {
     getData();
   }, []);
 
+  // Show loading message while data is being fetched
   if (loading) {
     return <div>loading...</div>;
   }
@@ -156,6 +188,8 @@ export default function GoalsProgressReport() {
               />
             </form>
           </Form>
+
+          {/* Form for filtering by program or site */}
           <Form {...form}>
             <form
               onSubmit={form.handleSubmit(onSubmitProgram)}
@@ -174,6 +208,8 @@ export default function GoalsProgressReport() {
               />
             </form>
           </Form>
+
+          {/* Form for filtering by goal type */}
           <Form {...form}>
             <form
               onSubmit={form.handleSubmit(onSubmitGoalType)}
@@ -196,6 +232,7 @@ export default function GoalsProgressReport() {
 
         <div className="flex items-center space-x-[160px]">
           <div className="flex flex-col space-y-4">
+            {/* Date picker for start date */}
             <Popover>
               <PopoverTrigger asChild>
                 <Button
@@ -247,6 +284,8 @@ export default function GoalsProgressReport() {
                   initialFocus
                 />
               </PopoverContent>
+
+              {/* Date picker for completion date */}
             </Popover>
             <Popover>
               <PopoverTrigger asChild>
@@ -257,6 +296,7 @@ export default function GoalsProgressReport() {
                     !discontinuedDate && "text-muted-foreground",
                   )}
                 >
+                  {/* Date picker for discontinued date */}
                   <CalendarIcon />
                   {discontinuedDate ? (
                     format(discontinuedDate, "PPP")
@@ -284,6 +324,7 @@ export default function GoalsProgressReport() {
             />
           </div>
 
+          {/* Buttons to apply, clear filters, and switch between table/chart */}
           <Button onClick={filter}>Apply Filter</Button>
           <Button onClick={clearFilter} variant="outline">
             Clear Filter
@@ -298,12 +339,14 @@ export default function GoalsProgressReport() {
         </div>
       </div>
 
+{/* Render either the chart or the data table */}
       {chartType ? (
         <GoalsAndProgressCharts data={tableData ?? []} />
       ) : (
         <DataTable columns={columns} data={tableData ?? []} />
       )}
 
+{/* Display the total number of responses if checkbox is checked */}
       {showTotalResponse && (
         <div className="mt-4">Total responses: {tableData?.length}</div>
       )}

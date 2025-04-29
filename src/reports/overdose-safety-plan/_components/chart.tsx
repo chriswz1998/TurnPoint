@@ -1,3 +1,22 @@
+/**
+ * Overdose Safety Plan Chart
+ *
+ * This component generates a bar chart displaying the number of individuals associated 
+ * with each Program/Site based on overdose safety plan data.
+ *
+ * Features:
+ * - Uses `Recharts` to create a bar chart visualization.
+ * - Aggregates data by counting occurrences of each `ProgramOrSite`.
+ * - Displays results dynamically based on the provided dataset.
+ *
+ * How to Modify:
+ * - To change the chart type (e.g., PieChart, LineChart), replace `BarChart` with another Recharts component.
+ * - To modify the bar colors, update the `fill` property inside `<Bar>`.
+ * - To include additional data fields, modify the `useMemo` function to extract and structure more data points.
+ * - To adjust text styles (e.g., size of axis labels), update the `tick` properties inside `<XAxis>` and `<YAxis>`.
+ * - To customize margins and spacing, modify the `margin` property of `<BarChart>`.
+ */
+
 import { useMemo } from "react";
 import {
   BarChart,

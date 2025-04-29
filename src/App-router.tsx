@@ -1,3 +1,15 @@
+// AppRoutes Component
+// This component defines the routing structure for the application using react-router-dom.
+// - It includes routes for different pages such as Login, Dashboard, File Upload, Account Creation, and Reports.
+// - Each route is associated with a specific page or component that renders when the user navigates to that route.
+// - The `Layout` component wraps around all main routes, which provides a consistent layout structure for the pages.
+// - There are multiple dynamic routes for specific reports (e.g., `/report/flow-through/:id`), where `:id` is a dynamic parameter used in fetching or rendering data.
+// 
+// How to modify:
+// - To add new routes, simply add a new `<Route>` element with the desired `path` and `element`.
+// - If needed, you can create nested routes by adding `<Route>` elements inside a parent route, like the `/report` routes for individual reports.
+// - Make sure that any dynamic routes (e.g., `/report/flow-through/:id`) use the necessary parameters when working with the route components.
+
 import { Routes, Route } from "react-router-dom";
 import { Login } from "@/auth/login.tsx";
 import Layout from "@/layout/layout.tsx";

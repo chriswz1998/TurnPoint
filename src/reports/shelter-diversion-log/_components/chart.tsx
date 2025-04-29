@@ -1,3 +1,20 @@
+/**
+ * ShelterDiversionChart Component
+ * 
+ * This component takes data related to shelter diversion and displays three separate bar charts:
+ * - Eviction Prevention by Program/Site
+ * - Successful Diversion by Program/Site
+ * - Community Engagement by Program/Site
+ * 
+ * The data is grouped by program or site, and each chart visualizes the count of occurrences 
+ * for eviction prevention, successful diversion, and community engagement, respectively.
+ * 
+ * How to modify:
+ * - You can customize the chart colors by changing the `color` argument in each `renderChart` call.
+ * - To add more metrics to visualize, you can modify the `useMemo` hook to include additional logic 
+ *   for processing more data fields, and then update the `renderChart` calls accordingly.
+ */
+
 import { useMemo } from "react";
 import {
   BarChart,
@@ -11,11 +28,13 @@ import {
 } from "recharts";
 import { shelderDiversionFollowupProps } from "@/reports/shelter-diversion-log/_components/columns.tsx";
 
+// Props interface for passing data into the component
 interface Props {
   data: shelderDiversionFollowupProps[];
 }
 
 export default function ShelterDiversionChart({ data }: Props) {
+    // Memoized function to process the data and group it by program
   const { evictionData, diversionData, communityData } = useMemo(() => {
     const evictionMap: Record<string, number> = {};
     const diversionMap: Record<string, number> = {};
@@ -23,20 +42,22 @@ export default function ShelterDiversionChart({ data }: Props) {
 
     data.forEach((item) => {
       const program = item.community || "Unknown";
-
+      // Increment the count for eviction prevention
       if (item.evictionPrevention) {
         evictionMap[program] = (evictionMap[program] || 0) + 1;
       }
+      // Increment the count for successful diversion
       if (item.successfulDiversion) {
         diversionMap[program] = (diversionMap[program] || 0) + 1;
       }
-
+      // Increment the count for community engagement
       if (item.community) {
         communityMap[program] = (communityMap[program] || 0) + 1;
       }
     });
 
     return {
+      // Convert each map into an array of objects with program and count
       evictionData: Object.entries(evictionMap).map(([program, count]) => ({
         program,
         count,
@@ -50,8 +71,9 @@ export default function ShelterDiversionChart({ data }: Props) {
         count,
       })),
     };
-  }, [data]);
+  }, [data]); // Recalculate the data whenever the input 'data' changes
 
+  // Helper function to render each chart
   const renderChart = (
     chartData: { program: string; count: number }[],
     title: string,
@@ -83,6 +105,7 @@ export default function ShelterDiversionChart({ data }: Props) {
     </div>
   );
 
+  // Rendering three charts for eviction prevention, successful diversion, and community engagement
   return (
     <div className="p-4 max-w-4xl mx-auto">
       {renderChart(
