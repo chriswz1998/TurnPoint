@@ -1,3 +1,8 @@
+// RegisterForm.tsx
+// The RegisterForm component renders a user registration form with fields for username, email, password, and profile photo.
+// It validates input using Zod schema and handles form submission to register a new user via an API.
+
+// Import necessary components and libraries
 import {
   Form,
   FormControl,
@@ -15,6 +20,7 @@ import toast from "react-hot-toast";
 import useFetch from "@/lib/use-http";
 import { ImageUpload } from "@/components/image-upload.tsx";
 
+// Define the validation schema using Zod
 const RegisterSchema = z.object({
   name: z.string().min(2, { message: "Username is required" }),
   email: z.string().email(),
@@ -22,9 +28,11 @@ const RegisterSchema = z.object({
   avatar: z.any().optional(), // 可选文件类型
 });
 
+// RegisterForm component - renders the user registration form
 export const RegisterForm = () => {
   const { fetchData, loading } = useFetch();
 
+  // Initialize the form with default values and validation
   const form = useForm<z.infer<typeof RegisterSchema>>({
     resolver: zodResolver(RegisterSchema),
     defaultValues: {
@@ -34,17 +42,19 @@ export const RegisterForm = () => {
     },
   });
 
+  // Handle form submission
   const onSubmit = async (data: z.infer<typeof RegisterSchema>) => {
-    const res = await fetchData("auth/register", "POST", data);
+    const res = await fetchData("auth/register", "POST", data);// Change the endpoint or method here if needed
     console.log(res);
     if (res) {
-      toast.success("User registered successfully");
-      form.reset();
+      toast.success("User registered successfully"); // Modify the success message here if needed
+      form.reset(); // Reset the form fields after successful registration
     }
   };
 
   return (
     <div className="w-full max-w-xl mx-auto">
+      {/* Provide form context */}
       <Form {...form}>
         <form
           onSubmit={form.handleSubmit(onSubmit)}

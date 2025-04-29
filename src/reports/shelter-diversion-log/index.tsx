@@ -1,3 +1,25 @@
+/**
+ * ShelterDiversion Component
+ *
+ * This component is responsible for displaying and managing the Shelter Diversion Follow-Up Report. 
+ * It allows users to filter the data based on several criteria such as "Diverted To", "Diversion Method", 
+ * "Community", "Eviction Prevention", and "Follow-Up Date". The component also includes a toggle 
+ * to switch between a table view and a chart view for better visualization of the data.
+ * 
+ * The component uses react-hook-form for handling form validation, Zod for schema validation, 
+ * and custom UI components like buttons, inputs, and select menus for filtering. It also fetches 
+ * data from an API and displays it in a data table or chart format.
+ * 
+ * How to modify:
+ * - To modify the filters, adjust the filter logic in the `filter` function and the `FormSchema`.
+ * - You can add new filters by extending the `FormSchema` and adding corresponding input components.
+ * - The table can be customized by adjusting the `columns` array or adding new columns for different data.
+ * - To add or change the chart visualization, modify the `ShelterDiversionChart` component.
+ * 
+ * Props:
+ * - `id`: The report ID, which is fetched from the URL parameters.
+ */
+
 import { Button } from "@/components/ui/button.tsx";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";

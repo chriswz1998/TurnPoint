@@ -1,3 +1,25 @@
+/**
+ * Loss of Service Report Page
+ *
+ * This file defines the `LossOfServiceReport` React component, which displays a report of Loss of Service records.
+ * Users can view the data in a table or switch to a chart view. Multiple filters are available to refine the results.
+ *
+ * Key Features:
+ * - Fetches Loss of Service data from the server based on a `report/:id` route.
+ * - Allows users to filter the table by Individual, Program/Site, Rationale, Reason for Restriction, 
+ *   Related to Incident, and Review TPCSLOS fields.
+ * - Supports switching between a table view (`DataTable`) and a chart view (`LosOfServiceCharts`).
+ * - Users can apply multiple filters simultaneously or clear all filters at once.
+ *
+ * How to Modify:
+ * - To add new filters, create new state variables and update the `filterTable` function.
+ * - To change the server endpoint, modify the URL inside the `getData` function.
+ * - To change the layout of filters or results, adjust the JSX structure within the main return block.
+ * - To enhance loading behavior, replace the basic `loading...` text with a spinner or skeleton loaders.
+ * - To add additional chart options, update `LosOfServiceCharts` to accept new chart types and modify `chartType` logic.
+ */
+
+
 import { Button } from "@/components/ui/button.tsx";
 import { Input } from "@/components/ui/input.tsx";
 import { DataTable } from "@/reports/loss-of-service/_components/data-table.tsx";

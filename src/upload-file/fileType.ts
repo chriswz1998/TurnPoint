@@ -1,3 +1,31 @@
+/**
+ * This file contains interfaces that define the structure of data for various report types used within the system.
+ * The reports cover a wide range of information, such as assessment of individuals' situations at the time of intake,
+ * their citizenship or veteran status, progress on their goals, incidents that occurred, and more.
+ *
+ * These interfaces are designed to organize the data from files so that they can be processed and displayed correctly 
+ * within the system. Each report type is associated with a specific set of fields and data.
+ *
+ * Below are the main interfaces described:
+ * 
+ * - **Type1Report**: A general report containing data on previous situations, immediate needs upon intake, and individual characteristics
+ *   such as citizenship status, veteran status, income, etc.
+ * - **Type2Individual - Type11Individual**: Specific individual reports, which may include details such as start and exit dates, 
+ *   exit reasons, goals, and incident records, among others.
+ * 
+ * **ParsedData** is the main interface that groups all possible types of data processed from uploaded files, making it
+ * easier to manipulate and display the information within the system.
+ *
+ * To modify or add new report types:
+ * - **Add new report types**: If you need to add a new report type, create a new interface that matches the requirements of the
+ *   report. Ensure that each field in the interface is suitable for the type of data expected in the report.
+ * - **Update existing report fields**: If you need to add or modify fields in an existing report, be sure to update the 
+ *   corresponding data types while maintaining the consistency of the interfaces.
+ * 
+ * It is important to maintain consistency in field names and data types so that the system can correctly process
+ * the uploaded files and display the information properly.
+ */
+
 export interface Type1Report {
   IntakeAssessmentByPreviousLivingSituation: IntakeAssessmentByPreviousLivingSituation[],
   IntakeAssessmentByImmediateNeedsUponIntake: IntakeAssessmentByImmediateNeedsUponIntake[],

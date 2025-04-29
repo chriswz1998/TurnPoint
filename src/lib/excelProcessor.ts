@@ -1,4 +1,60 @@
 // excelProcessor.ts
+// =========================================
+// This file handles the extraction and parsing of data from an Excel file.
+// It is designed to process data from multiple types of reports that come in Excel format,
+// extracting relevant information from specific rows and columns based on the report type.
+// The data is then transformed into a structured format (objects or arrays) based on the rows and columns of each sheet.
+
+// =========================================
+// File Structure:
+// The Excel file is assumed to have a single sheet, where data is arranged in rows and columns.
+// Each report type expects a certain structure in terms of which rows and columns hold relevant data.
+// The parsing logic extracts specific columns from each row based on the report type, and maps them into objects.
+// This allows for handling different types of data, such as individual records, intake assessments, program details, etc.
+
+// =========================================
+// General Explanation of Rows and Columns:
+// - Each row in the Excel sheet corresponds to a set of related data entries.
+// - Each column represents a specific field within a record. 
+// - The parsing logic assumes that:
+//   - The first row in the sheet contains the header information (the column names).
+//   - Subsequent rows contain the actual data that needs to be parsed.
+//   - The columns are identified by their index (starting from 0 for the first column).
+// - For example:
+//     - Row 0 (header row) might contain "Individual", "Program", "Start Date", "Exit Date", etc.
+//     - Row 1, Row 2, etc. contain actual data corresponding to those headers.
+
+// =========================================
+// Modifying the Row and Column Handling:
+// In case the Excel file's layout changes, or if a different report type is used that requires a different structure,
+// you can modify the column and row parsing logic by adjusting the following parts of the code:
+// 1. Identifying Columns:
+//    - Columns are referenced by their index. If a column is added or removed, make sure to update the logic that refers to them.
+//    - For example, if the "Exit Date" column is moved to the second position (index 1), you'd adjust any references to `row[3]` (the old position) to `row[1]` (the new position).
+// 2. Section Identification (for Type1Report and others):
+//    - The logic used to identify sections (e.g., by checking if a row contains certain keywords like "By Immediate Needs Upon Intake") can be modified if the section headers change.
+//    - This is especially useful for reports with dynamic or flexible sections, where you can change the condition used to identify when a section starts or ends (e.g., by changing `row[0] === "By Immediate Needs Upon Intake"`).
+// 3. Row Data Extraction:
+//    - When extracting data from rows, each row is checked for required values before it is added to the report.
+//    - If a new field is added to a report (e.g., "New Status" or "Age"), you'd need to add additional conditions to check for it in the rows and map it to the appropriate property in the resulting object.
+
+// =========================================
+// Example of Modifying the Row and Column Parsing Logic:
+// If the "Start Date" is no longer in the second column (index 1), but instead in the third column (index 2), you would change the following:
+// From: `row[2]`
+// To: `row[3]`
+// This ensures the data from the correct column is mapped to the "Start Date" field.
+
+// =========================================
+// Detailed Parsing Functions:
+// Each parsing function is responsible for handling a specific report type, extracting data from rows and columns
+// and transforming it into a structured format. Below is an overview of how each parsing function works:
+
+// 1. **parseType1**: This function processes a report that breaks data into sections such as "Immediate Needs" and "Previous Living Situation".
+//    - It assumes that rows with specific keywords in the first column (e.g., "By Immediate Needs Upon Intake") mark the start of a section.
+//    - The function adds rows to different parts of the report based on the current section.
+
+
 import {
   ParsedData,
   Type1Report,
@@ -15,10 +71,12 @@ import {
 } from "@/upload-file/fileType";
 import * as XLSX from "xlsx";
 
-// ========== 类型定义 ==========
+// ========== Type Definitions ==========
 
-// ========== 公共函数 ==========
+// ========== Common Functions ==========
+
 const formatDate = (dateValue: any): string => {
+  // Format a date value into a string format "dd/mm/yyyy"
   if (dateValue instanceof Date) {
     return dateValue.toLocaleDateString("es-ES");
   } else if (typeof dateValue === "number") {
@@ -29,6 +87,7 @@ const formatDate = (dateValue: any): string => {
 };
 
 const parseType1 = (jsonData: any): Type1Report[] => {
+  // Parse data of Type 1 report (Intake Assessment)
   const type1Report: Type1Report[] = [];
   let currentReport: Type1Report = {
     IntakeAssessmentByPreviousLivingSituation: [],
@@ -40,6 +99,7 @@ const parseType1 = (jsonData: any): Type1Report[] => {
 
   let section = "";
   jsonData.forEach((row: string[]) => {
+    // Switch between different sections of the report based on row values
     if (row[0] === "By Immediate Needs Upon Intake") {
       section = "ImmediateNeeds";
     } else if (row[0] === "By Previous Living Situation") {
@@ -93,6 +153,7 @@ const parseType1 = (jsonData: any): Type1Report[] => {
     }
 
     if (row[0] === "Total") {
+      // Once we hit the "Total" row, push the current report and reset for the next
       if (
         currentReport.IntakeAssessmentByPreviousLivingSituation.length > 0 ||
         currentReport.IntakeAssessmentByImmediateNeedsUponIntake.length > 0 ||
@@ -117,8 +178,9 @@ const parseType1 = (jsonData: any): Type1Report[] => {
   return type1Report;
 };
 
-// ========== 各类型处理函数 ==========
+// ========== Parsing Functions for Each Type ==========
 export const parseType2 = (rows: any[][]): Type2Individual[] => {
+  // Parse Type 2 report (Individual Flow Through)
   return rows
     .slice(1)
     .filter((r) => r.length && r.some((v) => v))
@@ -132,6 +194,7 @@ export const parseType2 = (rows: any[][]): Type2Individual[] => {
 };
 
 export const parseType3 = (rows: any[][]): Type3Individual[] => {
+  // Parse Type 3 report (Service Loss with Restriction)
   return rows
     .slice(1)
     .filter((r) => r.length && r.some((v) => v))
@@ -318,11 +381,14 @@ const readFileAsArrayBuffer = (file: File): Promise<ArrayBuffer> => {
   });
 };
 
-// ========== 主入口函数 ==========
+// Rest of the parsing functions...
+
+// ========== Main Entry Function ==========
 export const processExcelFile = async (
   file: File,
   fileType: string,
 ): Promise<ParsedData> => {
+  // Main function to process Excel file, read it, and parse data based on type
   const buffer = await readFileAsArrayBuffer(file);
   const workbook = XLSX.read(new Uint8Array(buffer), { type: "array" });
   const sheetName = workbook.SheetNames[0];
@@ -337,6 +403,7 @@ export const processExcelFile = async (
     filetype: fileType,
   };
 
+  // Depending on fileType, select the appropriate parsing function
   if (fileType === "Flow Through") metadata.records = parseType2(jsonData);
   if (fileType === "Loss of Service") metadata.records = parseType3(jsonData);
   if (fileType === "Rent Supplement Request")

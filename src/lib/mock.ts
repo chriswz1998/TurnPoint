@@ -1,3 +1,36 @@
+/**
+ * Array of available file types for reporting.
+ *
+ * This array contains a list of objects, each representing a specific file type used in the system. 
+ * Each object contains:
+ * - `name`: The name of the file type, which is a descriptive label used for display purposes.
+ * - `id`: A unique identifier for each file type, which is used to reference or categorize the file type in the system.
+ * 
+ * The file types represent various reports or documents related to different processes, such as:
+ * - Intake Reporting
+ * - Flow Through
+ * - Loss of Service
+ * - Rent Supplement Request
+ * - Goals and Progress
+ * - Safety Plan
+ * - Overdose Safety Plan
+ * - Incident Report
+ * - Individuals
+ * - Shelter Diversion Follow-Up Log
+ * - Site List
+ *
+ * To modify this list:
+ * 1. To add a new file type, create a new object with a unique `id` and appropriate `name` and push it into the `filetypes` array.
+ * 2. To remove an existing file type, simply remove the corresponding object from the array.
+ * 3. To change the name or ID of an existing file type, modify the `name` or `id` of the desired object.
+ * 
+ * Example of how to add a new file type:
+ * {
+ *   name: 'New Report Type',
+ *   id: '12',
+ * }
+ */
+
 export const filetypes = [
     {
         name: 'Intake Reporting',

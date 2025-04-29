@@ -26,7 +26,7 @@ const useFetch = <IP, OP>() => {
         headers: {
           "Content-Type": "application/json",
           Authorization: local_token ? `Bearer ${local_token}` : "",
-          ...headers, // 扩展用户传递的headers
+          ...headers, 
         },
         body: body ? JSON.stringify(body) : null,
       });
@@ -45,7 +45,7 @@ const useFetch = <IP, OP>() => {
       setLoading(false);
     }
 
-    return null; // 在出现错误时返回 null
+    return null; 
   };
 
   return { loading, error, data, fetchData };

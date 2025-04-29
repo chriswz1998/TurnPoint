@@ -1,3 +1,16 @@
+// FlowThroughReport.tsx
+//
+// This file renders a flow-through report using a table or a chart depending on the user's preference.
+// It allows the user to filter the data by program/site, exit reason, and date range (start and end dates).
+// It fetches the data from an API, applies filters, and allows toggling between a table and chart view.
+//
+// To modify:
+// - You can change the filtering options (program/site, exit reason, date range).
+// - You can modify the appearance and behavior of the date pickers and filters.
+// - You can add more filtering logic based on other criteria if needed.
+// - You can modify how the data is presented in the chart and table components.
+// - You can also update the structure of the data or API requests if required.
+
 import { format } from "date-fns";
 import { CalendarIcon } from "lucide-react";
 import { Checkbox } from "@/components/ui/checkbox.tsx";
@@ -22,7 +35,9 @@ import { CheckedState } from "@radix-ui/react-checkbox";
 import FlowThroughCharts from "@/reports/flow-through/_components/chart.tsx";
 import { filterData } from "@/reports/flow-through/lib/filterByDateRange.ts";
 
+// Main component for the flow-through report
 export default function FlowThroughReport() {
+    // States to manage the filter values and data
   const [searchProgramOrSite, setSearchProgramOrSite] = useState<
     string | undefined
   >();
@@ -36,10 +51,12 @@ export default function FlowThroughReport() {
   const [tableData, setTableData] = useState<flowThroughDataProps[] | null>();
   const [chartType, setChartType] = useState<boolean>(false);
 
+    // Custom hook to fetch data from the server
   const { fetchData, loading } = useHttp<any, flowThroughDataProps[]>();
   const [showTotalResponse, setShowTotalResponse] =
     useState<CheckedState>(false);
 
+    // Filter function to apply filters on the data
   const filter = () => {
     setTableData(
       filterData(originalData ?? [], {
@@ -51,6 +68,7 @@ export default function FlowThroughReport() {
     );
   };
 
+    // Clear all filters and reset the data
   const clearFilter = async () => {
     setTableData(originalData);
     setStartDate(undefined);
@@ -60,10 +78,12 @@ export default function FlowThroughReport() {
     setExitReason(undefined);
   };
 
+    // Toggle between table and chart view
   const SwitchToChart = () => {
     setChartType(!chartType);
   };
 
+    // Fetch data from the API when the component mounts
   const getData = async () => {
     const res = (await fetchData(
       `report/${id}`,
@@ -73,10 +93,12 @@ export default function FlowThroughReport() {
     setOriginalData(res);
   };
 
+    // useEffect hook to trigger data fetching on component mount
   useEffect(() => {
     getData();
   }, []);
 
+    // Show a loading message if the data is being fetched
   if (loading) {
     return <div>loading...</div>;
   }
@@ -85,6 +107,7 @@ export default function FlowThroughReport() {
     <div className="p-4 space-y-4">
       <div className="sticky top-0 left-0 bg-white z-50 flex flex-col justify-center space-y-4">
         <h2 className="text-2xl font-semibold">Flow-Through Report</h2>
+        {/* Input fields for searching program or site and exit reason */}
         {/*{JSON.stringify(tableData)}*/}
         <div className="flex items-center space-x-4">
           <Input
@@ -99,6 +122,7 @@ export default function FlowThroughReport() {
             value={searchExitReason ?? ""}
             onChange={(e) => setExitReason(e.target.value)}
           />
+           {/* Date picker for start date */}
           <Popover>
             <PopoverTrigger asChild>
               <Button
@@ -158,6 +182,7 @@ export default function FlowThroughReport() {
               onCheckedChange={(checked) => setShowTotalResponse(checked)}
             />
           </div>
+          {/* Buttons to apply filters, clear filters, and toggle chart/table view */}
           <Button onClick={filter}>Apply Filter</Button>
           <Button onClick={clearFilter} variant="outline">
             Clear Filter
@@ -167,12 +192,13 @@ export default function FlowThroughReport() {
           </Button>
         </div>
       </div>
+      {/* Display either the table or chart based on the toggle */}
       {chartType ? (
         <FlowThroughCharts data={tableData ?? []} />
       ) : (
         <DataTable columns={columns} data={tableData ?? []} />
       )}
-
+      {/* Show the total number of responses if the checkbox is checked */}
       <div>{showTotalResponse && <p>total is {tableData?.length}</p>}</div>
     </div>
   );

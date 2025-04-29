@@ -1,4 +1,17 @@
-// components/RecentFilesList.tsx
+/**
+ * RecentFilesList Component
+ * 
+ * This component displays a list of recently uploaded files with their filename, upload time, 
+ * and provides an option to view the report for each file. It utilizes the `formatDate` function 
+ * to format the upload time and includes an icon next to each file name.
+ * 
+ * Props:
+ * - `files`: An array of files to display, each containing an `id`, `filename`, and `uploadtime`.
+ * 
+ * Note:
+ * - The `formatDate` function is used to format the `uploadtime` for each file.
+ * - The link "View Report" currently does not navigate anywhere; it should be updated to point to the correct URL or route.
+ */
 
 import { PaperClipIcon } from '@heroicons/react/16/solid'
 import { formatDate } from '@/lib/utils.ts'
@@ -28,12 +41,12 @@ const RecentFilesList = ({ files }: { files: FileUploaderProps[] | null }) => {
                 </div>
               </div>
               <div className="ml-4 shrink-0">
-                <a
+                {/* <a
                   href="#"
                   className="font-medium text-indigo-600 hover:text-indigo-500"
                 >
                   View Report
-                </a>
+                </a> */}
               </div>
             </li>
           ))}

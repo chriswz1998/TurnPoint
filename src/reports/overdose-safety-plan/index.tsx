@@ -1,3 +1,32 @@
+/**
+ * OverdoseSafetyPlan
+ *
+ * This component renders a complete report view for the Overdose Safety Plan data.
+ * It provides functionality to:
+ * - Fetch report data from an API based on a report ID (`id` from URL parameters).
+ * - Filter entries by `Individual` and/or `Program or Site` using a form.
+ * - Toggle between a data table view and a bar chart visualization.
+ * - Display total number of filtered responses if requested.
+ * - Clear filters and reset the dataset easily.
+ *
+ * Features:
+ * - Dynamic data loading using a custom `useHttp` hook.
+ * - Form validation and handling via `react-hook-form` and `zod`.
+ * - Chart rendering using `recharts`.
+ * - Data table rendering using `@tanstack/react-table` wrapped in a custom `DataTable` component.
+ * - Responsive and user-friendly UI with sticky header and flexible filtering.
+ *
+ * Components used:
+ * - `Form`, `Input`, `Button`, `Checkbox` (UI components)
+ * - `DataTable` for table view
+ * - `OverdoseSafetyPlanCharts` for chart view
+ *
+ * Notes:
+ * - If loading is in progress, displays a "Loading..." message.
+ * - `SwitchToChart` toggles between table and chart views.
+ * - `Total Responses` checkbox shows the number of entries currently displayed after filtering.
+ */
+
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
@@ -42,6 +71,7 @@ export default function OverdoseSafetyPlan() {
 
   const { fetchData, loading } = useHttp<any, overdoseSafetyPlanProps[]>();
 
+  // Schema for form validation using Zod
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
     defaultValues: {
@@ -50,6 +80,7 @@ export default function OverdoseSafetyPlan() {
     },
   });
 
+  // Applies filtering to table data based on form values
   const filter = () => {
     const { individual, programOrSite } = form.getValues();
     const filteredData = filterData({
@@ -60,6 +91,7 @@ export default function OverdoseSafetyPlan() {
     setTableData(filteredData);
   };
 
+  // Resets the filters and restores original data
   const clearFilter = () => {
     form.reset({
       individual: "",
@@ -69,10 +101,12 @@ export default function OverdoseSafetyPlan() {
     setTableData(originalData ?? []);
   };
 
+  // Toggles between table view and chart view
   const SwitchToChart = () => {
     setChartType(!chartType);
   };
 
+  // Fetches the report data from the API
   const getData = async () => {
     const res = (await fetchData(
       `report/${id}`,
@@ -82,14 +116,17 @@ export default function OverdoseSafetyPlan() {
     setTableData(res);
   };
 
+  // Fetch data on mount or when the `id` changes
   useEffect(() => {
     getData();
   }, [id]);
 
+  // Render loading state while fetching
   if (loading) {
     return <div>Loading...</div>;
   }
 
+  // Main component render
   return (
     <div className="p-4 space-y-4">
       <div className="sticky top-0 left-0 bg-white z-50 shadow-md p-4 flex flex-col justify-center space-y-4">

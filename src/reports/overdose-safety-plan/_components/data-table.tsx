@@ -1,3 +1,31 @@
+/**
+ * Generic DataTable Component
+ *
+ * This component renders a dynamic and reusable table using `@tanstack/react-table`
+ * and a custom UI table system.
+ *
+ * Features:
+ * - Dynamically generates the table header and body based on the provided column definitions and data.
+ * - Gracefully handles empty data with a "No results" fallback.
+ * - Supports selection state for rows.
+ *
+ * Props:
+ * - `columns`: An array of column definitions (`ColumnDef`) describing how each column should be rendered.
+ * - `data`: An array of data entries to populate the table rows.
+ *
+ * How to Use:
+ * - Import and pass the `columns` and `data` props according to your table structure.
+ * - Columns must match the keys of your data model.
+ *
+ * Example:
+ * ```tsx
+ * <DataTable columns={userColumns} data={userData} />
+ * ```
+ *
+ * Notes:
+ * - This component focuses only on displaying data. For features like pagination, sorting, and filtering, extend the `useReactTable` configuration.
+ */
+
 "use client";
 
 import {

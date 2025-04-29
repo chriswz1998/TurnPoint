@@ -1,3 +1,8 @@
+// Login.tsx
+// This page provides the user login form, including email and password fields.
+// It authenticates the user against the API, stores the access token upon success,
+// updates the authentication context, and redirects the user to the dashboard.
+
 // Test user credentials
 // Username: test@example.com
 // Password: 1122

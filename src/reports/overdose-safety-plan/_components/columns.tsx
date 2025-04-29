@@ -1,3 +1,20 @@
+/**
+ * Overdose Safety Plan - Table Columns Definition
+ *
+ * This file defines the columns for displaying Overdose Safety Plan records 
+ * in a data table using `@tanstack/react-table`.
+ *
+ * Features:
+ * - Specifies column headers for each key field from `overdoseSafetyPlanProps`.
+ * - Formats the `TodaysDate` field using a custom `formatDate` utility for better readability.
+ *
+ * How to Modify:
+ * - To add a new field, add a new object to the `columns` array with the appropriate `accessorKey` and `header`.
+ * - To change how a field is displayed, modify the `cell` function inside the corresponding column definition.
+ * - To rearrange column order, change the order of entries in the `columns` array.
+ * - If adding new fields to the database, ensure `overdoseSafetyPlanProps` is updated accordingly.
+ */
+
 "use client";
 
 import { ColumnDef } from "@tanstack/react-table";

@@ -1,3 +1,6 @@
+// Layout.tsx
+// This is the main application layout, including the sidebar, header, and page content.
+
 import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar";
 import { AppSidebar } from "@/layout/_components/app-sidebar.tsx";
 import { Outlet } from "react-router-dom";
@@ -5,6 +8,7 @@ import { Header } from "@/layout/_components/header.tsx";
 import { useAuth } from "@/context/AuthContext.tsx";
 import UnauthenticatedNotice from "@/layout/_components/UnauthenticatedNotice.tsx";
 
+// Layout component
 export default function Layout() {
   const { user, loading } = useAuth();
 

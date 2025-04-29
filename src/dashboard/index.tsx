@@ -1,3 +1,8 @@
+// index.tsx
+// This page displays the main dashboard for the application,
+// highlighting the core features like Excel report generation, data handling,
+// flexible templates, and smart file type selection.
+
 import GradientBackgroundContainer from '@/components/GradientBackgroundContainer'
 import {
   ArrowPathIcon,
@@ -6,6 +11,7 @@ import {
   LockClosedIcon
 } from '@heroicons/react/24/outline'
 
+// Define the list of features to display on the dashboard
 const features = [
   {
     name: 'Smart file type selection',
@@ -33,10 +39,13 @@ const features = [
   }
 ]
 
+// Dashboard component - displays main information and feature list
 export default function Dashboard() {
   return (
+    // Background container with white background and padding
     <GradientBackgroundContainer className="bg-white w-full h-full py-24 sm:py-32">
       <div className="mx-auto max-w-7xl px-6 lg:px-8">
+        {/* Header section */}
         <div className="mx-auto max-w-2xl lg:text-center">
           <h2 className="text-base/7 font-semibold text-indigo-600">
             Generate reports faster
@@ -50,6 +59,8 @@ export default function Dashboard() {
             minimal effort.
           </p>
         </div>
+
+        {/* Features list section */}
         <div className="mx-auto mt-16 max-w-2xl sm:mt-20 lg:mt-24 lg:max-w-4xl">
           <dl className="grid max-w-xl grid-cols-1 gap-x-8 gap-y-10 lg:max-w-none lg:grid-cols-2 lg:gap-y-16">
             {features.map((feature) => (
@@ -63,6 +74,8 @@ export default function Dashboard() {
                   </div>
                   {feature.name}
                 </dt>
+
+                {/* Feature description */}
                 <dd className="mt-2 text-base/7 text-gray-600">
                   {feature.description}
                 </dd>

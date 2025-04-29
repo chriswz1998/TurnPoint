@@ -1,3 +1,12 @@
+// UploadFile Component
+// This component provides functionality for file uploading and displays recently uploaded files.
+// - It uses the `FileUploader` component for uploading files.
+// - The `RecentFilesList` component is used to display a list of the most recent files that have been uploaded.
+// - It fetches the list of recent files from the API using the `useHttp` custom hook.
+// - The loading state is handled to show a loading message while fetching the recent files.
+// - To modify, you can change the API endpoint in the `recentlyList` function to fetch different data or add additional features like error handling or file filtering.
+
+
 import FileUploader from "@/upload-file/_components/FileUploader.tsx";
 import { useEffect } from "react";
 import useHttp from "@/lib/use-http.ts";
