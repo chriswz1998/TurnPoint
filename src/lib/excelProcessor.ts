@@ -298,6 +298,7 @@ export const parseType6 = (rows: any[][]): Type6Individual[] => {
     }));
 };
 
+// This type has been commented thoroughly to better explain how all of this parsing works.
 export const parseType7 = (rows: any[][]): Type7Individual[] => {
   return rows
     // Skip the header row by slicing off the first row of the 2D array.
