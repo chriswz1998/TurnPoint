@@ -53,6 +53,11 @@
 // 1. **parseType1**: This function processes a report that breaks data into sections such as "Immediate Needs" and "Previous Living Situation".
 //    - It assumes that rows with specific keywords in the first column (e.g., "By Immediate Needs Upon Intake") mark the start of a section.
 //    - The function adds rows to different parts of the report based on the current section.
+// 
+// 2. **parseType7**: This function processes a specific report format (Type 7) and maps data from rows into `Type7Individual` objects.
+//    - It assumes that the first row is a header and skips it, then filters out any empty rows.
+//    - It extracts and trims data from each row into properties like "Individual", "Program or Site", "Staff Member", and others, and formats the date using the `formatDate` utility.
+//    - The structure of the data and the properties in the object are described in detail in the comments for `parseType7` for better understanding of its functionality.
 
 
 import {
@@ -295,17 +300,46 @@ export const parseType6 = (rows: any[][]): Type6Individual[] => {
 
 export const parseType7 = (rows: any[][]): Type7Individual[] => {
   return rows
-    .slice(1)
-    .filter((r) => r.length && r.some((v) => v))
+    // Skip the header row by slicing off the first row of the 2D array.
+    .slice(1) 
+    // Filter out rows that are empty or contain no meaningful data.
+    .filter((r) => r.length && r.some((v) => v)) 
+    // Map each row to a structured object with properties based on column data.
     .map((row) => ({
+      // The first element of the row represents the "Individual" name/ID.
+      // If it's undefined or null, it will default to an empty string, then convert it to string and trim whitespace.
       Individual: (row[0] ?? "").toString().trim(),
+
+      // The second element represents the "Program or Site" name.
+      // Similar to the first field, it defaults to an empty string if undefined, and trims whitespace.
       "Program or Site": (row[1] ?? "").toString().trim(),
+
+      // The third element represents the "Staff Member".
+      // It is converted to a string and any leading or trailing spaces are trimmed.
       "Staff Member": (row[2] ?? "").toString().trim(),
+
+      // The fourth element represents "Today's Date".
+      // This field is processed using a custom `formatDate()` function that formats the date value.
       "Today's Date": formatDate(row[3]),
+
+      // The fifth element represents "Risk Factors".
+      // Again, it's converted to string and trimmed to remove any whitespace.
       "Risk Factors": (row[4] ?? "").toString().trim(),
+
+      // The sixth element represents "Risk Reduction Actions".
+      // It is handled in the same way: default to empty string, convert to string, and trim.
       "Risk Reduction Actions": (row[5] ?? "").toString().trim(),
+
+      // The seventh element represents "Wellness Habits".
+      // Similar to other fields, it ensures the value is a string and trims whitespace.
       "Wellness Habits": (row[6] ?? "").toString().trim(),
+
+      // The eighth element represents "Support People".
+      // This value is converted to a string and trimmed of extra spaces.
       "Support People": (row[7] ?? "").toString().trim(),
+
+      // The ninth element represents "Crisis Contacts".
+      // It follows the same pattern: default to empty string, convert to string, and trim.
       "Crisis Contacts": (row[8] ?? "").toString().trim(),
     }));
 };
