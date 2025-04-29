@@ -1,14 +1,4 @@
 import { Button } from "@/components/ui/button.tsx";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm } from "react-hook-form";
-import { z } from "zod";
-
-import {
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-} from "@/components/ui/form.tsx";
 import { Input } from "@/components/ui/input.tsx";
 import { DataTable } from "@/reports/individuals-report/_components/data-table";
 import {
@@ -21,38 +11,39 @@ import { Checkbox } from "@/components/ui/checkbox.tsx";
 import { CheckedState } from "@radix-ui/react-checkbox";
 import { useParams } from "react-router-dom";
 import { filterData } from "@/lib/filterIndividuals.ts";
-
-const FormSchema = z.object({
-  individual: z.string().optional(),
-  program: z.string().optional(),
-});
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover.tsx";
+import { cn } from "@/lib/utils.ts";
+import { CalendarIcon } from "lucide-react";
+import { format } from "date-fns";
+import { Calendar } from "@/components/ui/calendar.tsx";
 
 export default function IndividualsReport() {
   const { id } = useParams();
   const [originalData, setOriginalData] = useState<individualsReportProp[]>([]);
   const [filteredData, setFilteredData] = useState<individualsReportProp[]>([]);
+
   const [showTotalResponse, setShowTotalResponse] =
     useState<CheckedState>(false);
+  const [individual, setIndividual] = useState<string | undefined>();
+  const [program, setProgram] = useState<string | undefined>();
+  const [birth, setBirth] = useState<Date | undefined>();
+
   const { fetchData, loading } = useHttp<any, individualsReportProp[]>();
 
-  // Función de filtrado
   const filter = () => {
     const filteredData = filterData({
-      form,
+      individual,
+      program,
+      birth,
       originalData: originalData ?? [],
     });
 
-    console.log("Filtered data: ", filteredData);
     setFilteredData(filteredData);
   };
-
-  const form = useForm<z.infer<typeof FormSchema>>({
-    resolver: zodResolver(FormSchema),
-    defaultValues: {
-      individual: "",
-      program: "",
-    },
-  });
 
   const getData = async () => {
     const res = (await fetchData(
@@ -64,7 +55,9 @@ export default function IndividualsReport() {
   };
 
   const clearFilters = () => {
-    form.reset();
+    setIndividual(undefined);
+    setProgram(undefined);
+    setBirth(undefined);
     setFilteredData(originalData);
     setShowTotalResponse(false);
   };
@@ -78,64 +71,61 @@ export default function IndividualsReport() {
   return (
     <div className="p-4 space-y-4">
       <h2 className="text-2xl font-semibold">Individuals Report</h2>
-
-      <Form {...form}>
-        <form
-          onSubmit={(e) => e.preventDefault()}
-          className="flex flex-wrap items-center gap-4"
-        >
-          <FormField
-            control={form.control}
-            name="individual"
-            render={({ field }) => (
-              <FormItem>
-                <FormControl>
-                  <Input
-                    placeholder="Search by Individual"
-                    {...field}
-                    className="w-[220px]"
-                  />
-                </FormControl>
-              </FormItem>
-            )}
-          />
-          <FormField
-            control={form.control}
-            name="program"
-            render={({ field }) => (
-              <FormItem>
-                <FormControl>
-                  <Input
-                    placeholder="Search by Program/Site"
-                    {...field}
-                    className="w-[260px]"
-                  />
-                </FormControl>
-              </FormItem>
-            )}
-          />
-          <div className="flex items-center space-x-2">
-            <span>Total Responses</span>
-            <Checkbox
-              checked={showTotalResponse}
-              onCheckedChange={(checked) => setShowTotalResponse(checked)}
+      <div className="flex flex-wrap items-center gap-4">
+        <Input
+          placeholder="Search by Individual"
+          value={individual}
+          onChange={(e) => setIndividual(e.target.value)}
+          className="w-[220px]"
+        />
+        <Input
+          placeholder="Search by Program/Site"
+          value={program}
+          onChange={(e) => setProgram(e.target.value)}
+          className="w-[260px]"
+        />
+        <Popover>
+          <PopoverTrigger asChild>
+            <Button
+              variant={"outline"}
+              className={cn(
+                "w-[240px] justify-start text-left font-normal",
+                !birth && "text-muted-foreground",
+              )}
+            >
+              <CalendarIcon />
+              {birth ? format(birth, "PPP") : <span>Pick a date and time</span>}
+            </Button>
+          </PopoverTrigger>
+          <PopoverContent className="w-auto p-0" align="start">
+            <Calendar
+              mode="single"
+              selected={birth}
+              onSelect={setBirth}
+              initialFocus
             />
-          </div>
-          <Button type="button" onClick={filter}>
-            Apply Filter
-          </Button>
-          <Button type="button" onClick={clearFilters} variant="outline">
-            Clear Filter
-          </Button>
-        </form>
-      </Form>
-      <DataTable columns={columns} data={filteredData} />
-
+          </PopoverContent>
+        </Popover>
+        <div className="flex items-center space-x-2">
+          <span>Total Responses</span>
+          <Checkbox
+            checked={showTotalResponse}
+            onCheckedChange={(checked) => setShowTotalResponse(checked)}
+          />
+        </div>
+        <Button type="button" onClick={filter}>
+          Apply Filter
+        </Button>
+        <Button type="button" onClick={clearFilters} variant="outline">
+          Clear Filter
+        </Button>
+      </div>
       {showTotalResponse && (
         <div className="text-sm text-muted-foreground">
           Total: {filteredData.length}
         </div>
       )}
+      <DataTable columns={columns} data={filteredData} />
     </div>
   );
 }

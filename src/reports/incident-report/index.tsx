@@ -53,8 +53,7 @@ export default function IncidentReport() {
       form,
       originalData: originalData ?? [],
     });
-
-    console.log("Filtered data: ", filteredData);
+    console.log(dateAndTimeOfIncident);
     setTableData(filteredData);
   };
 
@@ -100,11 +99,8 @@ export default function IncidentReport() {
   const getData = async () => {
     const res = (await fetchData(
       `report/${id}`,
-      "GET"
+      "GET",
     )) as incidentReportProps[];
-
-    console.log("Fetched Data: ", res);
-    console.log("ID:", id);
 
     setTableData(res);
     setOriginalData(res);
@@ -196,10 +192,7 @@ export default function IncidentReport() {
                 render={({ field }) => (
                   <FormItem>
                     <FormControl>
-                      <Input
-                        placeholder="Search by Type Incident"
-                        {...field}
-                      />
+                      <Input placeholder="Search by Type Incident" {...field} />
                     </FormControl>
                   </FormItem>
                 )}
@@ -208,7 +201,7 @@ export default function IncidentReport() {
               <FormField
                 control={form.control}
                 name="dateAndTimeOfIncident"
-                render={({ field }) => (
+                render={() => (
                   <FormItem>
                     <FormControl>
                       <Popover>
@@ -217,12 +210,12 @@ export default function IncidentReport() {
                             variant={"outline"}
                             className={cn(
                               "w-[240px] justify-start text-left font-normal",
-                              !field.value && "text-muted-foreground"
+                              !dateAndTimeOfIncident && "text-muted-foreground",
                             )}
                           >
                             <CalendarIcon />
-                            {field.value ? (
-                              format(field.value, "PPP")
+                            {dateAndTimeOfIncident ? (
+                              format(dateAndTimeOfIncident, "PPP")
                             ) : (
                               <span>Pick a date and time</span>
                             )}
@@ -231,8 +224,8 @@ export default function IncidentReport() {
                         <PopoverContent className="w-auto p-0" align="start">
                           <Calendar
                             mode="single"
-                            selected={field.value}
-                            onSelect={field.onChange}
+                            selected={dateAndTimeOfIncident}
+                            onSelect={setDateAndTimeOfIncident}
                             initialFocus
                           />
                         </PopoverContent>
