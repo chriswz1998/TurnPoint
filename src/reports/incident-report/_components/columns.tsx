@@ -39,6 +39,6 @@ export const columns: ColumnDef<incidentReportProps>[] = [
   },
   {
     accessorKey: "typeOfSeriousIncident",
-    header: "Type of Serious Incident",
+    header: "Type of Incident",
   },
 ];
